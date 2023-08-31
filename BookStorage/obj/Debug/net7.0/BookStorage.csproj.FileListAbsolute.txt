@@ -1,0 +1,15 @@
+/Users/max/Projects/IJunior/BookStorage/bin/Debug/net7.0/BookStorage
+/Users/max/Projects/IJunior/BookStorage/bin/Debug/net7.0/BookStorage.deps.json
+/Users/max/Projects/IJunior/BookStorage/bin/Debug/net7.0/BookStorage.runtimeconfig.json
+/Users/max/Projects/IJunior/BookStorage/bin/Debug/net7.0/BookStorage.dll
+/Users/max/Projects/IJunior/BookStorage/bin/Debug/net7.0/BookStorage.pdb
+/Users/max/Projects/IJunior/BookStorage/obj/Debug/net7.0/BookStorage.csproj.AssemblyReference.cache
+/Users/max/Projects/IJunior/BookStorage/obj/Debug/net7.0/BookStorage.GeneratedMSBuildEditorConfig.editorconfig
+/Users/max/Projects/IJunior/BookStorage/obj/Debug/net7.0/BookStorage.AssemblyInfoInputs.cache
+/Users/max/Projects/IJunior/BookStorage/obj/Debug/net7.0/BookStorage.AssemblyInfo.cs
+/Users/max/Projects/IJunior/BookStorage/obj/Debug/net7.0/BookStorage.csproj.CoreCompileInputs.cache
+/Users/max/Projects/IJunior/BookStorage/obj/Debug/net7.0/BookStorage.dll
+/Users/max/Projects/IJunior/BookStorage/obj/Debug/net7.0/refint/BookStorage.dll
+/Users/max/Projects/IJunior/BookStorage/obj/Debug/net7.0/BookStorage.pdb
+/Users/max/Projects/IJunior/BookStorage/obj/Debug/net7.0/BookStorage.genruntimeconfig.cache
+/Users/max/Projects/IJunior/BookStorage/obj/Debug/net7.0/ref/BookStorage.dll

@@ -1,0 +1,15 @@
+/Users/max/Projects/IJunior/PlayerDatabase/bin/Debug/net7.0/PlayerDatabase
+/Users/max/Projects/IJunior/PlayerDatabase/bin/Debug/net7.0/PlayerDatabase.deps.json
+/Users/max/Projects/IJunior/PlayerDatabase/bin/Debug/net7.0/PlayerDatabase.runtimeconfig.json
+/Users/max/Projects/IJunior/PlayerDatabase/bin/Debug/net7.0/PlayerDatabase.dll
+/Users/max/Projects/IJunior/PlayerDatabase/bin/Debug/net7.0/PlayerDatabase.pdb
+/Users/max/Projects/IJunior/PlayerDatabase/obj/Debug/net7.0/PlayerDatabase.csproj.AssemblyReference.cache
+/Users/max/Projects/IJunior/PlayerDatabase/obj/Debug/net7.0/PlayerDatabase.GeneratedMSBuildEditorConfig.editorconfig
+/Users/max/Projects/IJunior/PlayerDatabase/obj/Debug/net7.0/PlayerDatabase.AssemblyInfoInputs.cache
+/Users/max/Projects/IJunior/PlayerDatabase/obj/Debug/net7.0/PlayerDatabase.AssemblyInfo.cs
+/Users/max/Projects/IJunior/PlayerDatabase/obj/Debug/net7.0/PlayerDatabase.csproj.CoreCompileInputs.cache
+/Users/max/Projects/IJunior/PlayerDatabase/obj/Debug/net7.0/PlayerDatabase.dll
+/Users/max/Projects/IJunior/PlayerDatabase/obj/Debug/net7.0/refint/PlayerDatabase.dll
+/Users/max/Projects/IJunior/PlayerDatabase/obj/Debug/net7.0/PlayerDatabase.pdb
+/Users/max/Projects/IJunior/PlayerDatabase/obj/Debug/net7.0/PlayerDatabase.genruntimeconfig.cache
+/Users/max/Projects/IJunior/PlayerDatabase/obj/Debug/net7.0/ref/PlayerDatabase.dll
