@@ -13,9 +13,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/max/Projects/IJunior/OOP_CardDeck/OOP_CardDeck.csproj",
-      "projectName": "OOP_CardDeck",
-      "projectPath": "/Users/max/Projects/IJunior/OOP_CardDeck/OOP_CardDeck.csproj",
+      "projectUniqueName": "/Users/max/Projects/IJunior/OOP_CardDeck/CardDeck.csproj",
+      "projectName": "CardDeck",
+      "projectPath": "/Users/max/Projects/IJunior/OOP_CardDeck/CardDeck.csproj",
       "packagesPath": "/Users/max/.nuget/packages/",
       "outputPath": "/Users/max/Projects/IJunior/OOP_CardDeck/obj/",
       "projectStyle": "PackageReference",
@@ -59,7 +59,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.306/RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.307/RuntimeIdentifierGraph.json"
       }
     }
   }

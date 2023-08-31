@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 25.0.1706.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OOP_CardDeck", "OOP_CardDeck\OOP_CardDeck.csproj", "{A4F0BB28-463C-4D97-A390-555C9D1E3777}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CardDeck", "OOP_CardDeck\CardDeck.csproj", "{A4F0BB28-463C-4D97-A390-555C9D1E3777}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookStorage", "BookStorage\BookStorage.csproj", "{1EA93992-6FA4-4FC7-9851-69287DC98E27}"
 EndProject

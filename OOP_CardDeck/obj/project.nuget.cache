@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "hX2HRjCh1teuibTYvcm0IGUSeXKThFQVzxxCrOKFrloMU/M8Ml8mFOEUKHFaKVW7kCexJsZEqWecNplctvmu6g==",
+  "dgSpecHash": "YmE8NhjJaCdrCgoapYpR+VOtQGf2yu/Nn8L2spaBV5SYm+q2GDoQVMrN5SqP4z6Vsn/eIQQ0CWK+RFHOq9EIgA==",
   "success": true,
-  "projectFilePath": "/Users/max/Projects/IJunior/OOP_CardDeck/OOP_CardDeck.csproj",
+  "projectFilePath": "/Users/max/Projects/IJunior/OOP_CardDeck/CardDeck.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

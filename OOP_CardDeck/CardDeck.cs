@@ -12,24 +12,21 @@
         player = new Player(name);
         game = new Game(player);
 
-        game.Start();
+        game.Play();
     }
 }
 
 class Game
 {
     private Deck _deck = new Deck();
-    private Queue<Card> _playingDeck;
+    private Player _player;
 
     public Game(Player player)
     {
-        _playingDeck = _deck.MixDeck();
-        this.Player = player;
+        _player = player;
     }
 
-    public Player Player { get; private set; }
-
-    public void Start()
+    public void Play()
     {
         const string CommandToTakeCard = "1";
         const string CommandToTakeCards = "2";
@@ -41,9 +38,9 @@ class Game
 
         while (isActive)
         {
-            if (_playingDeck.Count < 1)
+            if (_deck.Count() < 1)
             {
-                isActive = FinishIfDeckIsFree();
+                isActive = GoToEnd();
 
                 if (isActive == false)
                     break;
@@ -55,7 +52,7 @@ class Game
             Console.WriteLine($"{CommandToTakeCards} - взять несколько карт");
             Console.WriteLine($"{CommandToShowCards} - закончить игру и показать карты");
             Console.WriteLine($"{CommandToExit} - выход из игры");
-            Console.Write($"{Player.Name} твой выбор: ");
+            Console.Write($"{_player.Name} твой выбор: ");
             currentCommand = Console.ReadLine();
 
             switch (currentCommand)
@@ -65,11 +62,11 @@ class Game
                     break;
 
                 case CommandToTakeCard:
-                    Player.AddCard(_playingDeck.Dequeue());
+                    _player.AddCard(_deck.GiveCard());
                     break;
 
                 case CommandToTakeCards:
-                    TakeCards();
+                    DealCards();
                     break;
 
                 case CommandToShowCards:
@@ -82,7 +79,7 @@ class Game
         }
     }
 
-    private bool FinishIfDeckIsFree()
+    private bool GoToEnd()
     {
         Console.WriteLine("\nВ колоде не осталось больше карт.");
         return FinishGame();
@@ -99,7 +96,7 @@ class Game
 
         Console.WriteLine("\nИгра окончена.");
         Console.WriteLine("Ваши карты: ");
-        Player.ShowCards();
+        _player.ShowCards();
 
         Console.WriteLine("Нажмите любую клавишу.");
         Console.ReadKey();
@@ -112,7 +109,7 @@ class Game
             Console.WriteLine("Меню:");
             Console.WriteLine($"{CommandToNewGame} - начать новую игру");
             Console.WriteLine($"{CommandToExit} - выход из игры");
-            Console.Write($"{Player.Name} твой выбор: ");
+            Console.Write($"{_player.Name} твой выбор: ");
             currentCommand = Console.ReadLine();
 
             switch (currentCommand)
@@ -138,11 +135,11 @@ class Game
 
     private void StartNewGame()
     {
-        _playingDeck = _deck.MixDeck();
-        Player.ResetCards();
+        _deck = new Deck();
+        _player.ResetCards();
     }
 
-    private void TakeCards()
+    private void DealCards()
     {
         int countCards;
         string userInput;
@@ -151,14 +148,18 @@ class Game
         userInput = Console.ReadLine();
 
         if (int.TryParse(userInput, out countCards))
-            if (countCards <= _playingDeck.Count)
+        {
+            if (countCards <= _deck.Count())
                 for (int i = 0; i < countCards; i++)
-                    Player.AddCard(_playingDeck.Dequeue());
+                    _player.AddCard(_deck.GiveCard());
             else
                 Console.WriteLine("\nВ колоде осталось меньше карт " +
                     "чем вам требуется");
+        }
         else
+        {
             Console.WriteLine("\nОшибка при вводе. Необходимо ввести число.");
+        }
 
         Console.WriteLine("\nНажмите любую клавишу...");
         Console.ReadKey();
@@ -170,7 +171,7 @@ class Player
 {
     private List<Card> _cards = new List<Card>();
 
-    public Player(string name, bool isAI = false)
+    public Player(string name)
     {
         Name = name;
     }
@@ -197,58 +198,67 @@ class Player
 class Deck
 {
     private List<Card> _cards = new List<Card>();
+    private Queue<Card> _mixedCards = new Queue<Card>();
 
     public Deck()
     {
         GenerateDeck36For21();
+        MixDeck();
     }
 
-    public Queue<Card> MixDeck()
+    public Card GiveCard()
+    {
+        return _mixedCards.Dequeue();
+    }
+
+    public int Count()
+    {
+        return _mixedCards.Count;
+    }
+
+    private void MixDeck()
     {
         int lowerBoundIndex = 0;
         int upperBoundIndex;
         Random random = new Random();
 
-        Queue<Card> mixedDeck = new Queue<Card>();
         List<Card> copyDeck = new List<Card>(_cards);
 
         do
         {
             upperBoundIndex = copyDeck.Count;
             int index = random.Next(lowerBoundIndex, upperBoundIndex);
-            mixedDeck.Enqueue(copyDeck[index]);
+            _mixedCards.Enqueue(copyDeck[index]);
             copyDeck.RemoveAt(index);
         } while (copyDeck.Count > 0);
 
-        return mixedDeck;
-    }
-
-    public void PrintDeck()
-    {
-        foreach (Card card in _cards)
-        {
-            card.Draw();
-            Console.WriteLine();
-        }
     }
 
     private void GenerateDeck36For21()
     {
-        foreach (Suit suit in Enum.GetValues(typeof(Suit)))
-            foreach (CardValue cardValue in Enum.GetValues(typeof(CardValue)))
-                _cards.Add(new Card(cardValue, suit));
+        _cards = new List<Card>();
+
+        Suit[] suits = (Suit[])Enum.GetValues(typeof(Suit));
+
+        foreach (Suit suit in suits)
+        {
+            Value[] values = (Value[])Enum.GetValues(typeof(Value));
+
+            foreach (Value value in values)
+                _cards.Add(new Card(value, suit));
+        }
     }
 }
 
 enum Suit
 {
-    clubs = '\x05',
-    diamonds = '\x04',
-    hearts = '\x03',
-    spades = '\x06'
+    Clubs = '\x05',
+    Diamonds = '\x04',
+    Hearts = '\x03',
+    Spades = '\x06'
 }
 
-enum CardValue
+enum Value
 {
     N6 = 6,
     N7 = 7,
@@ -263,17 +273,17 @@ enum CardValue
 
 class Card
 {
-    public Card(CardValue cardValue, Suit suit)
+    public Card(Value value, Suit suit)
     {
-        CardValue = cardValue;
+        Value = value;
         Suit = suit;
     }
 
-    public CardValue CardValue { get; private set; }
+    public Value Value { get; private set; }
     public Suit Suit { get; private set; }
 
     public void Draw()
     {
-        Console.Write($"|\t{CardValue}({Suit})\t|\n");
+        Console.Write($"|\t{Value}({Suit})\t|\n");
     }
 }
