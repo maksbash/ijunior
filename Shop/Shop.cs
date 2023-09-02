@@ -237,22 +237,53 @@ class Book
     }
 }
 
-class Author
+class Salesman : Person
 {
-    public Author(string fullName)
+    public Salesman(string name) : base(name) { }
+
+    public void Sell(Product product)
     {
-        FullName = fullName;
+        if (_products.Contains(product))
+        {
+            _cache += product.Cost;
+            _products.Remove(product);
+        }
     }
 
-    public string FullName { get; private set; }
+    public void AddProduct(Product product)
+    {
+        _products.Add(product);
+    }
+
 }
 
-class Genre
+class Person
 {
-    public Genre(string genreName)
+    protected List<Product> _products = new List<Product>();
+    protected int _cache;
+
+    public Person(string name)
     {
-        Name = genreName;
+        Name = name;
+    }
+
+    public string Name { get; protected set; }
+
+    public void ShowProduct()
+    {
+        foreach (Product product in _products)
+            Console.WriteLine(product);
+    }
+}
+
+class Product
+{
+    public Product(string name, int cost)
+    {
+        Name = name;
+        Cost = cost;
     }
 
     public string Name { get; private set; }
+    public int Cost { get; private set; }
 }

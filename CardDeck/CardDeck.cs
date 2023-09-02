@@ -2,15 +2,11 @@
 {
     private static void Main(string[] args)
     {
-        string name;
-        Player player;
-        Game game;
-
         Console.Write("Добро пожаловать, представьтесь пожалуйста: ");
-        name = Console.ReadLine();
+        string name = Console.ReadLine();
 
-        player = new Player(name);
-        game = new Game(player);
+        Player player = new Player(name);
+        Game game = new Game(player);
 
         game.Play();
     }
@@ -38,14 +34,6 @@ class Game
 
         while (isActive)
         {
-            if (_deck.Count() < 1)
-            {
-                isActive = GoToEnd();
-
-                if (isActive == false)
-                    break;
-            }
-
             Console.Clear();
             Console.WriteLine("Меню игры: ");
             Console.WriteLine($"{CommandToTakeCard} - взять одну карту");
@@ -75,6 +63,12 @@ class Game
 
                 default:
                     break;
+            }
+
+            if (_deck.Count() < 1)
+            {
+                Console.WriteLine("\nВ колоде не осталось больше карт!");
+                isActive = FinishGame();
             }
         }
     }
@@ -150,11 +144,15 @@ class Game
         if (int.TryParse(userInput, out countCards))
         {
             if (countCards <= _deck.Count())
+            {
                 for (int i = 0; i < countCards; i++)
                     _player.AddCard(_deck.GiveCard());
+            }
             else
+            {
                 Console.WriteLine("\nВ колоде осталось меньше карт " +
                     "чем вам требуется");
+            }
         }
         else
         {
@@ -180,7 +178,7 @@ class Player
 
     public void ResetCards()
     {
-        _cards = new List<Card>();
+        _cards.Clear();
     }
 
     public void ShowCards()
@@ -218,16 +216,13 @@ class Deck
 
     private void MixDeck()
     {
-        int lowerBoundIndex = 0;
-        int upperBoundIndex;
         Random random = new Random();
 
         List<Card> copyDeck = new List<Card>(_cards);
 
         do
         {
-            upperBoundIndex = copyDeck.Count;
-            int index = random.Next(lowerBoundIndex, upperBoundIndex);
+            int index = random.Next(copyDeck.Count);
             _mixedCards.Enqueue(copyDeck[index]);
             copyDeck.RemoveAt(index);
         } while (copyDeck.Count > 0);
@@ -236,50 +231,76 @@ class Deck
 
     private void GenerateDeck36For21()
     {
-        _cards = new List<Card>();
+        _cards.Clear();
 
-        Suit[] suits = (Suit[])Enum.GetValues(typeof(Suit));
+        List<Suit> suits = new List<Suit>
+        {
+            new Clubs(),
+            new Diamonds(),
+            new Hearts(),
+            new Spades()
+        };
+
+        List<string> values = new List<string>
+        {
+            "6", "7", "8", "9", "10", "J", "D", "K", "A"
+        };
 
         foreach (Suit suit in suits)
         {
-            Value[] values = (Value[])Enum.GetValues(typeof(Value));
-
-            foreach (Value value in values)
+            foreach (string value in values)
                 _cards.Add(new Card(value, suit));
         }
     }
 }
 
-enum Suit
+abstract class Suit
 {
-    Clubs = '\x05',
-    Diamonds = '\x04',
-    Hearts = '\x03',
-    Spades = '\x06'
+    public string Name { get; protected set; }
 }
 
-enum Value
+class Clubs : Suit
 {
-    N6 = 6,
-    N7 = 7,
-    N8 = 8,
-    N9 = 9,
-    N10 = 10,
-    J = 2,
-    D = 3,
-    K = 4,
-    A = 11
+    public Clubs()
+    {
+        Name = "Clubs";
+    }
+
+}
+
+class Diamonds : Suit
+{
+    public Diamonds()
+    {
+        Name = "Diamonds";
+    }
+}
+
+class Hearts : Suit
+{
+    public Hearts()
+    {
+        Name = "Hearts";
+    }
+}
+
+class Spades : Suit
+{
+    public Spades()
+    {
+        Name = "Spades";
+    }
 }
 
 class Card
 {
-    public Card(Value value, Suit suit)
+    public Card(string value, Suit suit)
     {
         Value = value;
         Suit = suit;
     }
 
-    public Value Value { get; private set; }
+    public string Value { get; private set; }
     public Suit Suit { get; private set; }
 
     public void Draw()
