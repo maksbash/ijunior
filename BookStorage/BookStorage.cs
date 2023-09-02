@@ -13,7 +13,6 @@
         BookStorage bookStorage = new BookStorage();
 
         bool isActive = true;
-        string currentCommand;
 
         while (isActive)
         {
@@ -31,7 +30,7 @@
             Console.WriteLine($"{CommandToExit} Выход");
             Console.Write("Введите команду: ");
 
-            currentCommand = Console.ReadLine();
+            string currentCommand = Console.ReadLine();
 
             Console.WriteLine();
 
@@ -83,31 +82,21 @@ class BookStorage
 
     public void AddBook()
     {
-        Author author;
-        Book book;
-        Genre genre;
-        string bookName;
-        string authorFullName;
-        int year;
-        string genreName;
-
         Console.Clear();
         Console.WriteLine("Добавление новой книги");
 
         Console.Write("Введите название книги: ");
-        bookName = Console.ReadLine();
+        string bookName = Console.ReadLine();
 
         Console.Write("\nВведите ФИО автора: ");
-        authorFullName = Console.ReadLine();
+        string authorFullName = Console.ReadLine();
 
-        year = RequestYear();
+        int year = RequestYear();
 
         Console.Write("\nВведите жанр: ");
-        genreName = Console.ReadLine();
+        string genreName = Console.ReadLine();
 
-        genre = new Genre(genreName);
-        author = new Author(authorFullName);
-        book = new Book(bookName, author, year, genre);
+        Book book = new Book(bookName, authorFullName, year, genreName);
 
         _books.Add(++lastId, book);
     }
@@ -120,7 +109,7 @@ class BookStorage
         Console.Write("Введите номер книги для удаления: ");
 
         if (int.TryParse(Console.ReadLine(), out id))
-            if (_books.Keys.Contains(id))
+            if (_books.ContainsKey(id))
                 _books.Remove(id);
     }
 
@@ -168,7 +157,7 @@ class BookStorage
         {
             Book book = bookDesk.Value;
 
-            if (book.Author.FullName == authorFullName)
+            if (book.Author == authorFullName)
                 PrintBook(bookDesk.Key, book);
         }
     }
@@ -187,7 +176,7 @@ class BookStorage
         {
             Book book = bookDesk.Value;
 
-            if (book.Genre.Name == genreName)
+            if (book.Genre == genreName)
                 PrintBook(bookDesk.Key, book);
         }
     }
@@ -215,7 +204,7 @@ class BookStorage
 
 class Book
 {
-    public Book(string name, Author author, int year, Genre genre)
+    public Book(string name, string author, int year, string genre)
     {
         Name = name;
         Author = author;
@@ -224,35 +213,15 @@ class Book
     }
 
     public string Name { get; private set; }
-    public Author Author { get; private set; }
+    public string Author { get; private set; }
     public int Year { get; private set; }
-    public Genre Genre { get; private set; }
+    public string Genre { get; private set; }
 
     public string GetDescription()
     {
-        string description = $"Название: {Name}, автор: {Author.FullName}, " +
-            $"год: {Year}, жанр: {Genre.Name}";
+        string description = $"Название: {Name}, автор: {Author}, " +
+            $"год: {Year}, жанр: {Genre}";
 
         return description;
     }
-}
-
-class Author
-{
-    public Author(string fullName)
-    {
-        FullName = fullName;
-    }
-
-    public string FullName { get; private set; }
-}
-
-class Genre
-{
-    public Genre(string genreName)
-    {
-        Name = genreName;
-    }
-
-    public string Name { get; private set; }
 }
