@@ -2,63 +2,63 @@
 {
     private static void Main(string[] args)
     {
-        const string CommandToAddBook = "1";
-        const string CommandToRemoveBook = "2";
-        const string CommandToShowAllBooks = "3";
-        const string CommandToShowAllBooksByYear = "4";
-        const string CommandToShowAllBooksByGenre = "5";
-        const string CommandToShowAllBooksByAuthor = "6";
+        const string CommandToShowSalesmanProducts = "1";
+        const string CommandToShowBuerProducts = "2";
+        const string CommandToBuy = "3";
         const string CommandToExit = "9";
 
-        BookStorage bookStorage = new BookStorage();
+        Console.WriteLine("Как зовут продавца:");
+        Salesman salesman = new Salesman(Console.ReadLine());
+        salesman.AddProduct(new Product("Яблоко", 5));
+        salesman.AddProduct(new Product("Груша", 7));
+        salesman.AddProduct(new Product("Банан", 5));
+        salesman.AddProduct(new Product("Апельсин", 6));
+        salesman.AddProduct(new Product("Абрекос", 3));
+        salesman.AddProduct(new Product("Арбуз", 3));
+        salesman.AddProduct(new Product("Дыня", 4));
+        salesman.AddProduct(new Product("Вишня", 9));
+        salesman.AddProduct(new Product("Ананас", 11));
+
+        Console.WriteLine("Как зовут покупателя:");
+        string buyerName = Console.ReadLine();
+
+        Console.Write("Сколько денег есть у пакупателя?: ");
+        int buersMoney;
+        int.TryParse(Console.ReadLine(), out buersMoney);
+
+        Buyer buyer = new Buyer(buyerName, buersMoney);
+
+        Market market = new Market(salesman, buyer);
 
         bool isActive = true;
-        string currentCommand;
 
         while (isActive)
         {
             Console.Clear();
-            Console.WriteLine("Меню хранилища книг:");
-            Console.WriteLine($"{CommandToAddBook} Добавить книгу");
-            Console.WriteLine($"{CommandToRemoveBook} Удалить книгу");
-            Console.WriteLine($"{CommandToShowAllBooks} Показать все книги");
-            Console.WriteLine($"{CommandToShowAllBooksByYear} Показать все " +
-                $"книги по году издания");
-            Console.WriteLine($"{CommandToShowAllBooksByGenre} Показать все " +
-                $"книги по жанру");
-            Console.WriteLine($"{CommandToShowAllBooksByAuthor} Показать все " +
-                $"книги по автору");
+            Console.WriteLine($"{CommandToShowSalesmanProducts} - " +
+                $"вывести товары продавца");
+            Console.WriteLine($"{CommandToShowBuerProducts} - " +
+                $"вывести товары покупателя");
+            Console.WriteLine($"{CommandToBuy} - купить товар у продавца");
             Console.WriteLine($"{CommandToExit} Выход");
             Console.Write("Введите команду: ");
 
-            currentCommand = Console.ReadLine();
+            string currentCommand = Console.ReadLine();
 
             Console.WriteLine();
 
             switch (currentCommand)
             {
-                case CommandToAddBook:
-                    bookStorage.AddBook();
+                case CommandToShowSalesmanProducts:
+                    salesman.ShowProducts();
                     break;
 
-                case CommandToRemoveBook:
-                    bookStorage.RemoveBook();
+                case CommandToShowBuerProducts:
+                    buyer.ShowProducts();
                     break;
 
-                case CommandToShowAllBooks:
-                    bookStorage.ShowAllBooks();
-                    break;
-
-                case CommandToShowAllBooksByYear:
-                    bookStorage.ShowAllBooksByYear();
-                    break;
-
-                case CommandToShowAllBooksByGenre:
-                    bookStorage.ShowAllBooksByGenre();
-                    break;
-
-                case CommandToShowAllBooksByAuthor:
-                    bookStorage.ShowAllBooksByAuthor();
+                case CommandToBuy:
+                    market.Offer();
                     break;
 
                 case CommandToExit:
@@ -76,164 +76,44 @@
     }
 }
 
-class BookStorage
+class Market
 {
-    private Dictionary<int, Book> _books = new Dictionary<int, Book>();
-    private int lastId = -1;
+    private Salesman _salesman;
+    private Buyer _buyer;
 
-    public void AddBook()
+    public Market(Salesman salesman, Buyer buyer)
     {
-        Author author;
-        Book book;
-        Genre genre;
-        string bookName;
-        string authorFullName;
-        int year;
-        string genreName;
-
-        Console.Clear();
-        Console.WriteLine("Добавление новой книги");
-
-        Console.Write("Введите название книги: ");
-        bookName = Console.ReadLine();
-
-        Console.Write("\nВведите ФИО автора: ");
-        authorFullName = Console.ReadLine();
-
-        year = RequestYear();
-
-        Console.Write("\nВведите жанр: ");
-        genreName = Console.ReadLine();
-
-        genre = new Genre(genreName);
-        author = new Author(authorFullName);
-        book = new Book(bookName, author, year, genre);
-
-        _books.Add(++lastId, book);
+        _salesman = salesman;
+        _buyer = buyer;
     }
 
-    public void RemoveBook()
+    public void Offer()
     {
-        int id;
-        Console.Clear();
-        Console.WriteLine("Удаление книги");
-        Console.Write("Введите номер книги для удаления: ");
+        _salesman.ShowProducts();
 
-        if (int.TryParse(Console.ReadLine(), out id))
-            if (_books.Keys.Contains(id))
-                _books.Remove(id);
+        Console.Write("Введите Id продукта для покупки: ");
+        int.TryParse(Console.ReadLine(), out int id);
+        Product product;
+
+        if (_salesman.TryGetProduct(id, out product))
+            Deal(product);
+
     }
 
-    public void ShowAllBooks()
+    private bool Deal(Product product)
     {
-        Console.Clear();
-        Console.WriteLine("Хранилище книг: ");
-
-        foreach (var bookDesk in _books)
+        if (_salesman.CanSell(product))
         {
-            Book book = bookDesk.Value;
-            PrintBook(bookDesk.Key, book);
+            if (_buyer.CanBuy(product))
+            { 
+                _salesman.Sell(product);
+                _buyer.Buy(product);
+
+                return true;
+            }
         }
-    }
 
-    public void ShowAllBooksByYear()
-    {
-        int year;
-
-        Console.Clear();
-        year = RequestYear();
-
-        Console.WriteLine($"\n\nХранилище книг {year} года: ");
-
-        foreach (var bookDesk in _books)
-        {
-            Book book = bookDesk.Value;
-
-            if (book.Year == year)
-                PrintBook(bookDesk.Key, book);
-        }
-    }
-
-    public void ShowAllBooksByAuthor()
-    {
-        string authorFullName;
-
-        Console.Clear();
-        Console.Write("\nВведите ФИО автора: ");
-        authorFullName = Console.ReadLine();
-
-        Console.WriteLine($"Хранилище книг автора {authorFullName}: ");
-
-        foreach (var bookDesk in _books)
-        {
-            Book book = bookDesk.Value;
-
-            if (book.Author.FullName == authorFullName)
-                PrintBook(bookDesk.Key, book);
-        }
-    }
-
-    public void ShowAllBooksByGenre()
-    {
-        string genreName;
-
-        Console.Clear();
-        Console.Write("\nВведите жанр: ");
-        genreName = Console.ReadLine();
-
-        Console.WriteLine($"Хранилище книг жанра {genreName}: ");
-
-        foreach (var bookDesk in _books)
-        {
-            Book book = bookDesk.Value;
-
-            if (book.Genre.Name == genreName)
-                PrintBook(bookDesk.Key, book);
-        }
-    }
-
-    private void PrintBook(int key, Book book)
-    {
-        Console.Write($"\n{key} - {book.GetDescription()}");
-    }
-
-    private int RequestYear()
-    {
-        int year;
-
-        Console.Write("\nВведите год издания: ");
-
-        if (int.TryParse(Console.ReadLine(), out year))
-            return year;
-
-        Console.WriteLine("Введено некорректное значение!");
-
-        return RequestYear();
-    }
-}
-
-
-class Book
-{
-    public Book(string name, Author author, int year, Genre genre)
-    {
-        Name = name;
-        Author = author;
-        Year = year;
-        Genre = genre;
-    }
-
-    public string Name { get; private set; }
-    public Author Author { get; private set; }
-    public int Year { get; private set; }
-    public Genre Genre { get; private set; }
-
-    public string GetDescription()
-    {
-        string description = $"Название: {Name}, автор: {Author.FullName}, " +
-            $"год: {Year}, жанр: {Genre.Name}";
-
-        return description;
+        return false;
     }
 }
 
@@ -241,26 +121,72 @@ class Salesman : Person
 {
     public Salesman(string name) : base(name) { }
 
-    public void Sell(Product product)
-    {
-        if (_products.Contains(product))
-        {
-            _cache += product.Cost;
-            _products.Remove(product);
-        }
-    }
-
     public void AddProduct(Product product)
     {
         _products.Add(product);
     }
 
+    public bool Sell(Product product)
+    {
+        if (_products.Remove(product))
+        {
+            _wallet += product.Price;
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public bool CanSell(Product product)
+    {
+        return _products.Contains(product);
+    }
+
+    public bool TryGetProduct(int id, out Product product)
+    {
+        foreach (Product productForSale in _products)
+        {
+            if (productForSale.Id == id)
+            {
+                product = productForSale;
+
+                return true;
+            }
+        }
+
+        product = null;
+
+        return false;
+    }
+}
+
+class Buyer : Person
+{
+    public Buyer(string name, int defaultMoney) : base(name)
+    {
+        _wallet = defaultMoney;
+    }
+
+    public void Buy(Product product)
+    {
+        if (CanBuy(product))
+        {
+            _wallet -= product.Price;
+            _products.Add(product);
+        }
+    }
+
+    public bool CanBuy(Product product)
+    {
+        return _wallet >= product.Price;
+    }
 }
 
 class Person
 {
     protected List<Product> _products = new List<Product>();
-    protected int _cache;
+    protected int _wallet;
 
     public Person(string name)
     {
@@ -269,21 +195,26 @@ class Person
 
     public string Name { get; protected set; }
 
-    public void ShowProduct()
+    public void ShowProducts()
     {
+        Console.WriteLine($"\nПродукты у {Name}:");
         foreach (Product product in _products)
-            Console.WriteLine(product);
+            Console.WriteLine($"{product.Id} - {product.Name} ({product.Price})");
     }
 }
 
 class Product
 {
-    public Product(string name, int cost)
+    private static int _lastId = -1;
+
+    public Product(string name, int price)
     {
         Name = name;
-        Cost = cost;
+        Price = price;
+        Id = ++_lastId;
     }
 
+    public int Id { get; private set; }
     public string Name { get; private set; }
-    public int Cost { get; private set; }
+    public int Price { get; private set; }
 }
