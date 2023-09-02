@@ -200,7 +200,7 @@ class Deck
 
     public Deck()
     {
-        GenerateDeck36For21();
+        GenerateStandartDeck36();
         MixDeck();
     }
 
@@ -229,7 +229,7 @@ class Deck
 
     }
 
-    private void GenerateDeck36For21()
+    private void GenerateStandartDeck36()
     {
         _cards.Clear();
 
