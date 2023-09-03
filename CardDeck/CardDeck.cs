@@ -58,34 +58,29 @@ class Game
                     break;
 
                 case CommandToShowCards:
-                    isActive = FinishGame();
+                    isActive = End();
                     break;
 
                 default:
+                    Console.WriteLine("Такой команды не существует");
                     break;
             }
 
-            if (_deck.Count() < 1)
+            if (_deck.Count < 1)
             {
                 Console.WriteLine("\nВ колоде не осталось больше карт!");
-                isActive = FinishGame();
+                isActive = End();
             }
         }
     }
 
-    private bool GoToEnd()
+    private bool End()
     {
-        Console.WriteLine("\nВ колоде не осталось больше карт.");
-        return FinishGame();
-    }
-
-    private bool FinishGame()
-    {
-        const string CommandToNewGame = "1";
+        const string CommandToNew = "1";
         const string CommandToExit = "9";
 
         string currentCommand;
-        bool isNewGame = true;
+        bool isNew = true;
         bool isActive = true;
 
         Console.WriteLine("\nИгра окончена.");
@@ -101,19 +96,19 @@ class Game
 
             Console.Clear();
             Console.WriteLine("Меню:");
-            Console.WriteLine($"{CommandToNewGame} - начать новую игру");
+            Console.WriteLine($"{CommandToNew} - начать новую игру");
             Console.WriteLine($"{CommandToExit} - выход из игры");
             Console.Write($"{_player.Name} твой выбор: ");
             currentCommand = Console.ReadLine();
 
             switch (currentCommand)
             {
-                case CommandToNewGame:
-                    StartNewGame();
+                case CommandToNew:
+                    StartNew();
                     break;
 
                 case CommandToExit:
-                    isNewGame = false;
+                    isNew = false;
                     break;
 
                 default:
@@ -124,10 +119,10 @@ class Game
 
         Console.Clear();
 
-        return isNewGame;
+        return isNew;
     }
 
-    private void StartNewGame()
+    private void StartNew()
     {
         _deck = new Deck();
         _player.ResetCards();
@@ -143,7 +138,7 @@ class Game
 
         if (int.TryParse(userInput, out countCards))
         {
-            if (countCards <= _deck.Count())
+            if (countCards <= _deck.Count)
             {
                 for (int i = 0; i < countCards; i++)
                     _player.AddCard(_deck.GiveCard());
@@ -189,56 +184,50 @@ class Player
 
     public void AddCard(Card card)
     {
-        _cards.Add(card);
+        if (card is not null)
+            _cards.Add(card);
     }
 }
 
 class Deck
 {
-    private List<Card> _cards = new List<Card>();
     private Queue<Card> _mixedCards = new Queue<Card>();
 
     public Deck()
     {
-        GenerateStandartDeck36();
-        MixDeck();
+        Create();
+    }
+
+    public int Count {
+        get
+        {
+            return _mixedCards.Count;
+        }
+
+        private set { }
     }
 
     public Card GiveCard()
     {
-        return _mixedCards.Dequeue();
-    }
-
-    public int Count()
-    {
-        return _mixedCards.Count;
-    }
-
-    private void MixDeck()
-    {
-        Random random = new Random();
-
-        List<Card> copyDeck = new List<Card>(_cards);
-
-        do
+        if (Count > 0)
+            return _mixedCards.Dequeue();
+        else
         {
-            int index = random.Next(copyDeck.Count);
-            _mixedCards.Enqueue(copyDeck[index]);
-            copyDeck.RemoveAt(index);
-        } while (copyDeck.Count > 0);
-
+            Console.WriteLine("Закончились карты в колоде!");
+            return null;
+        }
     }
 
-    private void GenerateStandartDeck36()
+    private void Create()
     {
-        _cards.Clear();
+        List<Card> cards = new List<Card>();
 
-        List<Suit> suits = new List<Suit>
+        List<string> suits = new List<string>
         {
-            new Clubs(),
-            new Diamonds(),
-            new Hearts(),
-            new Spades()
+            "Cubes",
+            "Diamonds",
+            "Hearts",
+            "Spades"
         };
 
         List<string> values = new List<string>
@@ -246,62 +235,33 @@ class Deck
             "6", "7", "8", "9", "10", "J", "D", "K", "A"
         };
 
-        foreach (Suit suit in suits)
+        foreach (string suit in suits)
         {
             foreach (string value in values)
-                _cards.Add(new Card(value, suit));
+                cards.Add(new Card(value, suit));
         }
-    }
-}
 
-abstract class Suit
-{
-    public string Name { get; protected set; }
-}
+        Random random = new Random();
 
-class Clubs : Suit
-{
-    public Clubs()
-    {
-        Name = "Clubs";
-    }
-
-}
-
-class Diamonds : Suit
-{
-    public Diamonds()
-    {
-        Name = "Diamonds";
-    }
-}
-
-class Hearts : Suit
-{
-    public Hearts()
-    {
-        Name = "Hearts";
-    }
-}
-
-class Spades : Suit
-{
-    public Spades()
-    {
-        Name = "Spades";
+        do
+        {
+            int index = random.Next(cards.Count);
+            _mixedCards.Enqueue(cards[index]);
+            cards.RemoveAt(index);
+        } while (cards.Count > 0);
     }
 }
 
 class Card
 {
-    public Card(string value, Suit suit)
+    public Card(string value, string suit)
     {
         Value = value;
         Suit = suit;
     }
 
     public string Value { get; private set; }
-    public Suit Suit { get; private set; }
+    public string Suit { get; private set; }
 
     public void Draw()
     {
