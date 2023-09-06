@@ -54,11 +54,11 @@ class Game
                     break;
 
                 case CommandToTakeCards:
-                    DealCards();
+                    TransferCards();
                     break;
 
                 case CommandToShowCards:
-                    isActive = End();
+                    isActive = CompleteRound();
                     break;
 
                 default:
@@ -69,12 +69,12 @@ class Game
             if (_deck.Count < 1)
             {
                 Console.WriteLine("\nВ колоде не осталось больше карт!");
-                isActive = End();
+                isActive = CompleteRound();
             }
         }
     }
 
-    private bool End()
+    private bool CompleteRound()
     {
         const string CommandToNew = "1";
         const string CommandToExit = "9";
@@ -104,7 +104,7 @@ class Game
             switch (currentCommand)
             {
                 case CommandToNew:
-                    StartNew();
+                    StartNewRound();
                     break;
 
                 case CommandToExit:
@@ -122,13 +122,13 @@ class Game
         return isNew;
     }
 
-    private void StartNew()
+    private void StartNewRound()
     {
         _deck = new Deck();
         _player.ResetCards();
     }
 
-    private void DealCards()
+    private void TransferCards()
     {
         int countCards;
         string userInput;
@@ -195,11 +195,12 @@ class Deck
 
     public Deck()
     {
-        Create();
+        List<Card> cards = Create();
+        MixCards(cards);
     }
 
     public int Count => _mixedCards.Count;
-
+    
     public Card GiveCard()
     {
         if (Count > 0)
@@ -213,7 +214,7 @@ class Deck
         }
     }
 
-    private void Create()
+    private List<Card> Create()
     {
         List<Card> cards = new List<Card>();
 
@@ -236,6 +237,11 @@ class Deck
                 cards.Add(new Card(value, suit));
         }
 
+        return cards;
+    }
+
+    private void MixCards(List<Card> cards)
+    {
         Random random = new Random();
 
         do

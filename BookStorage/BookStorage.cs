@@ -78,7 +78,7 @@
 class BookStorage
 {
     private Dictionary<int, Book> _books = new Dictionary<int, Book>();
-    private int lastId = -1;
+    private int _lastId = -1;
 
     public void AddBook()
     {
@@ -98,7 +98,7 @@ class BookStorage
 
         Book book = new Book(bookName, authorFullName, year, genreName);
 
-        _books.Add(++lastId, book);
+        _books.Add(++_lastId, book);
     }
 
     public void RemoveBook()
@@ -119,10 +119,7 @@ class BookStorage
         Console.WriteLine("Хранилище книг: ");
 
         foreach (var bookDesk in _books)
-        {
-            Book book = bookDesk.Value;
-            PrintBook(bookDesk.Key, book);
-        }
+            PrintBook(bookDesk.Key, bookDesk.Value);
     }
 
     public void ShowAllBooksByYear()
@@ -135,12 +132,8 @@ class BookStorage
         Console.WriteLine($"\n\nХранилище книг {year} года: ");
 
         foreach (var bookDesk in _books)
-        {
-            Book book = bookDesk.Value;
-
-            if (book.Year == year)
-                PrintBook(bookDesk.Key, book);
-        }
+            if (bookDesk.Value.Year == year)
+                PrintBook(bookDesk.Key, bookDesk.Value);
     }
 
     public void ShowAllBooksByAuthor()
@@ -154,12 +147,8 @@ class BookStorage
         Console.WriteLine($"Хранилище книг автора {authorFullName}: ");
 
         foreach (var bookDesk in _books)
-        {
-            Book book = bookDesk.Value;
-
-            if (book.Author == authorFullName)
-                PrintBook(bookDesk.Key, book);
-        }
+            if (bookDesk.Value.Author.ToLower() == authorFullName.ToLower())
+                PrintBook(bookDesk.Key, bookDesk.Value);
     }
 
     public void ShowAllBooksByGenre()
@@ -173,12 +162,8 @@ class BookStorage
         Console.WriteLine($"Хранилище книг жанра {genreName}: ");
 
         foreach (var bookDesk in _books)
-        {
-            Book book = bookDesk.Value;
-
-            if (book.Genre == genreName)
-                PrintBook(bookDesk.Key, book);
-        }
+            if (bookDesk.Value.Genre.ToLower() == genreName.ToLower())
+                PrintBook(bookDesk.Key, bookDesk.Value);
     }
 
     private void PrintBook(int key, Book book)
