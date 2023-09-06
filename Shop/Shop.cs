@@ -7,7 +7,7 @@
         const string CommandToBuy = "3";
         const string CommandToExit = "9";
 
-        Console.WriteLine("Как зовут продавца:");
+        Console.Write("Как зовут продавца: ");
         Salesman salesman = new Salesman(Console.ReadLine());
         salesman.AddProduct(new Product("Яблоко", 5));
         salesman.AddProduct(new Product("Груша", 7));
@@ -19,12 +19,17 @@
         salesman.AddProduct(new Product("Вишня", 9));
         salesman.AddProduct(new Product("Ананас", 11));
 
-        Console.WriteLine("Как зовут покупателя:");
+        Console.Write("Как зовут покупателя: ");
         string buyerName = Console.ReadLine();
 
         Console.Write("Сколько денег есть у пакупателя?: ");
-        int buersMoney;
-        int.TryParse(Console.ReadLine(), out buersMoney);
+
+        if (int.TryParse(Console.ReadLine(), out int buersMoney) == false)
+        {
+            Console.WriteLine("\nВведено неверное значение! Попробуй ещё раз");
+            Console.ReadKey();
+            return ;
+        }
 
         Buyer buyer = new Buyer(buyerName, buersMoney);
 
@@ -93,24 +98,20 @@ class Market
 
         Console.Write("Введите Id продукта для покупки: ");
         int.TryParse(Console.ReadLine(), out int id);
-        Product product;
 
-        if (_salesman.TryGetProduct(id, out product))
+        if (_salesman.TryGetProduct(id, out Product product))
             Deal(product);
 
     }
 
     private bool Deal(Product product)
     {
-        if (_salesman.CanSell(product))
+        if (_buyer.CanBuy(product.Price))
         {
-            if (_buyer.CanBuy(product))
-            { 
-                _salesman.Sell(product);
-                _buyer.Buy(product);
+            _salesman.Sell(product);
+            _buyer.Buy(product);
 
-                return true;
-            }
+            return true;
         }
 
         return false;
@@ -169,17 +170,14 @@ class Buyer : Person
     }
 
     public void Buy(Product product)
-    {
-        if (CanBuy(product))
-        {
-            _wallet -= product.Price;
-            _products.Add(product);
-        }
+    { 
+        _wallet -= product.Price;
+        _products.Add(product);
     }
 
-    public bool CanBuy(Product product)
+    public bool CanBuy(int price)
     {
-        return _wallet >= product.Price;
+        return _wallet >= price;
     }
 }
 
