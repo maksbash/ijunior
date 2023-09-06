@@ -198,19 +198,14 @@ class Deck
         Create();
     }
 
-    public int Count {
-        get
-        {
-            return _mixedCards.Count;
-        }
-
-        private set { }
-    }
+    public int Count => _mixedCards.Count;
 
     public Card GiveCard()
     {
         if (Count > 0)
+        {
             return _mixedCards.Dequeue();
+        }
         else
         {
             Console.WriteLine("Закончились карты в колоде!");
