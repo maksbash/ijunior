@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\maksb\\source\\repos\\maksbash\\ijunior\\Base\\Base.csproj": {}
+    "C:\\Users\\maksb\\source\\repos\\maksbash\\ijunior\\PassangerTrainConfigurator\\PassangerTrainConfigurator.csproj": {}
   },
   "projects": {
-    "C:\\Users\\maksb\\source\\repos\\maksbash\\ijunior\\Base\\Base.csproj": {
+    "C:\\Users\\maksb\\source\\repos\\maksbash\\ijunior\\PassangerTrainConfigurator\\PassangerTrainConfigurator.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\maksb\\source\\repos\\maksbash\\ijunior\\Base\\Base.csproj",
-        "projectName": "Base",
-        "projectPath": "C:\\Users\\maksb\\source\\repos\\maksbash\\ijunior\\Base\\Base.csproj",
+        "projectUniqueName": "C:\\Users\\maksb\\source\\repos\\maksbash\\ijunior\\PassangerTrainConfigurator\\PassangerTrainConfigurator.csproj",
+        "projectName": "PassangerTrainConfigurator",
+        "projectPath": "C:\\Users\\maksb\\source\\repos\\maksbash\\ijunior\\PassangerTrainConfigurator\\PassangerTrainConfigurator.csproj",
         "packagesPath": "C:\\Users\\maksb\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\maksb\\Source\\Repos\\maksbash\\ijunior\\Base\\obj\\",
+        "outputPath": "C:\\Users\\maksb\\source\\repos\\maksbash\\ijunior\\PassangerTrainConfigurator\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\maksb\\AppData\\Roaming\\NuGet\\NuGet.Config",

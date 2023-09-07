@@ -1,19 +1,21 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 25.0.1706.1
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34024.191
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookStorage", "BookStorage\BookStorage.csproj", "{1EA93992-6FA4-4FC7-9851-69287DC98E27}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookStorage", "BookStorage\BookStorage.csproj", "{1EA93992-6FA4-4FC7-9851-69287DC98E27}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlayerDatabase", "PlayerDatabase\PlayerDatabase.csproj", "{E63DB1C6-ED01-4F0E-9358-88FFFAE6E98B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PlayerDatabase", "PlayerDatabase\PlayerDatabase.csproj", "{E63DB1C6-ED01-4F0E-9358-88FFFAE6E98B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Base", "Base\Base.csproj", "{7B1FE3FD-2537-47E8-B7AC-EB422797B767}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Base", "Base\Base.csproj", "{7B1FE3FD-2537-47E8-B7AC-EB422797B767}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BaseOOP", "BaseOOP\BaseOOP.csproj", "{257419CF-51F4-4DC7-BE5E-1BEA1A99C37E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BaseOOP", "BaseOOP\BaseOOP.csproj", "{257419CF-51F4-4DC7-BE5E-1BEA1A99C37E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CardDeck", "CardDeck\CardDeck.csproj", "{0E00B3A0-2C5E-45DE-B31E-FDF179ED326D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CardDeck", "CardDeck\CardDeck.csproj", "{0E00B3A0-2C5E-45DE-B31E-FDF179ED326D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shop", "Shop\Shop.csproj", "{1279ECBE-115B-4013-A79F-E973A1267DC4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shop", "Shop\Shop.csproj", "{1279ECBE-115B-4013-A79F-E973A1267DC4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PassangerTrainConfigurator", "PassangerTrainConfigurator\PassangerTrainConfigurator.csproj", "{14B839AC-D5BC-4D73-AF9D-7652D3CE158F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{1279ECBE-115B-4013-A79F-E973A1267DC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1279ECBE-115B-4013-A79F-E973A1267DC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1279ECBE-115B-4013-A79F-E973A1267DC4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14B839AC-D5BC-4D73-AF9D-7652D3CE158F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14B839AC-D5BC-4D73-AF9D-7652D3CE158F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14B839AC-D5BC-4D73-AF9D-7652D3CE158F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14B839AC-D5BC-4D73-AF9D-7652D3CE158F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

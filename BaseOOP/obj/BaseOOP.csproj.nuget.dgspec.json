@@ -1,25 +1,27 @@
 {
   "format": 1,
   "restore": {
-    "/Users/max/Projects/IJunior/BaseOOP/BaseOOP.csproj": {}
+    "C:\\Users\\maksb\\source\\repos\\maksbash\\ijunior\\BaseOOP\\BaseOOP.csproj": {}
   },
   "projects": {
-    "/Users/max/Projects/IJunior/BaseOOP/BaseOOP.csproj": {
+    "C:\\Users\\maksb\\source\\repos\\maksbash\\ijunior\\BaseOOP\\BaseOOP.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/max/Projects/IJunior/BaseOOP/BaseOOP.csproj",
+        "projectUniqueName": "C:\\Users\\maksb\\source\\repos\\maksbash\\ijunior\\BaseOOP\\BaseOOP.csproj",
         "projectName": "BaseOOP",
-        "projectPath": "/Users/max/Projects/IJunior/BaseOOP/BaseOOP.csproj",
-        "packagesPath": "/Users/max/.nuget/packages/",
-        "outputPath": "/Users/max/Projects/IJunior/BaseOOP/obj/",
+        "projectPath": "C:\\Users\\maksb\\source\\repos\\maksbash\\ijunior\\BaseOOP\\BaseOOP.csproj",
+        "packagesPath": "C:\\Users\\maksb\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\maksb\\Source\\Repos\\maksbash\\ijunior\\BaseOOP\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/max/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\maksb\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net7.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -53,7 +55,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.307/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.400\\RuntimeIdentifierGraph.json"
         }
       }
     }
