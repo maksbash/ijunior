@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shop", "Shop\Shop.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PassangerTrainConfigurator", "PassangerTrainConfigurator\PassangerTrainConfigurator.csproj", "{14B839AC-D5BC-4D73-AF9D-7652D3CE158F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladiatorFights", "GladiatorFights\GladiatorFights.csproj", "{BC2499B6-10AC-493F-B82B-E458A0F5C9B3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{14B839AC-D5BC-4D73-AF9D-7652D3CE158F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{14B839AC-D5BC-4D73-AF9D-7652D3CE158F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{14B839AC-D5BC-4D73-AF9D-7652D3CE158F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC2499B6-10AC-493F-B82B-E458A0F5C9B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC2499B6-10AC-493F-B82B-E458A0F5C9B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC2499B6-10AC-493F-B82B-E458A0F5C9B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC2499B6-10AC-493F-B82B-E458A0F5C9B3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
