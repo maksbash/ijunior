@@ -4,9 +4,11 @@ internal class Program
 {
     private static void Main(string[] args)
     {
-        Round r = new Round();
-        r.DrawBar(6, 5, 0);
-        r.DrawBar(3, 25, 0);
+        int GladiatorOneXPosition = 0;
+        int GladiatorOneYPosition = 2;
+        int GladiatorTwoXPosition = 50;
+        int GladiatorTwoYPosition = 2;
+        int GladiatorsYPosition = 2;
 
         Gladiator[] gladiators = {
             new Gaal("Гал"),
@@ -16,22 +18,113 @@ internal class Program
             new Retiary("Ретарий")
         };
 
-        int index = 1;
-        foreach (Gladiator gladiator in gladiators)
+        Gladiator gladiatorOne;
+        Gladiator gladiatorTwo;
+        bool isActive = true;
+
+        while (isActive)
         {
-            Console.WriteLine(index++ + ". " + gladiator.GetDescription());
-            //index++;
+            Console.WriteLine("Гладиаторы: ");
+            int index = 1;
+
+            foreach (Gladiator gladiator in gladiators)
+                Console.WriteLine(index++ + ". " + gladiator.GetDescription());
+
+            Console.Write("Введите номер 1-го гладиатора: ");
+            if (TryGetGladiator(Console.ReadLine(), out gladiatorOne) == false)
+                continue;
+            Console.Write("Введите номер 2-го гладиатора: ");
+            if (TryGetGladiator(Console.ReadLine(), out gladiatorTwo) == false)
+                continue;
+
+            isActive = false;
+
+            Console.Clear();
+            Console.WriteLine("Дерутся следующие гладиаторы: ");
+            Console.WriteLine(gladiatorOne.GetDescription());
+            Console.WriteLine(gladiatorTwo.GetDescription());
+            GladiatorsYPosition += 2;
+
+            Console.SetCursorPosition(GladiatorOneXPosition, GladiatorsYPosition);
+            Console.Write($"{gladiatorOne.Name}");
+            Console.SetCursorPosition(GladiatorTwoXPosition, GladiatorsYPosition++);
+            Console.Write($"{gladiatorTwo.Name}");
+
+            float defaultHelthOne = gladiatorOne.Health / 10;
+            float defaultHelthTwo = gladiatorTwo.Health / 10;
+
+            Console.WriteLine();
+            while (gladiatorOne.Health > 0 && gladiatorTwo.Health > 0)
+            {
+                Round r = new Round();
+                r.DrawBar((int)(gladiatorOne.Health / defaultHelthOne), GladiatorOneXPosition, GladiatorsYPosition);
+                r.DrawBar((int)(gladiatorTwo.Health / defaultHelthTwo), GladiatorTwoXPosition, GladiatorsYPosition);
+
+                Console.WriteLine();
+                (int CurrentPositionX, int CurrentPositionY) = Console.GetCursorPosition();
+
+                gladiatorOne.TakeDamage(gladiatorTwo.Damage);
+                gladiatorTwo.TakeDamage(gladiatorOne.Damage);
+                Console.SetCursorPosition(GladiatorOneXPosition, CurrentPositionY);
+                Console.Write($"{gladiatorOne.Health}");
+                Console.SetCursorPosition(GladiatorTwoXPosition, CurrentPositionY++);
+                Console.Write($"{gladiatorTwo.Health}");
+
+                Thread.Sleep(500);
+            }
+
+            Console.WriteLine("\n");
+
+            if (gladiatorOne.Health > 0)
+                Console.WriteLine($"Победил гладиатор - {gladiatorOne.Name}");
+            else if (gladiatorTwo.Health > 0)
+                Console.WriteLine($"Победил гладиатор - {gladiatorTwo.Name}");
+            else
+                Console.WriteLine("Ничья!");
+
+            Console.ReadKey();
         }
-        
-        while (gladiators[0].Health > 0 && gladiators[1].Health > 0)
+    }
+
+    private static bool TryGetGladiator(string command, out Gladiator gladiator)
+    {
+        const string CommandToSetGal = "1";
+        const string CommandToSetAnabat = "2";
+        const string CommandToSetBestiary = "3";
+        const string CommandToSetLekverary = "4";
+        const string CommandToSetRetary = "5";
+
+        switch (command) 
         {
-            gladiators[0].TakeDamage(gladiators[1].Damage);
-            gladiators[1].TakeDamage(gladiators[0].Damage);
-            Console.WriteLine($"\n1: {gladiators[0].Health}; 2: {gladiators[1].Health}");
-            //Console.ReadKey();
+            case CommandToSetGal:
+                gladiator = new Gaal("Гал");
+                break;
+
+            case CommandToSetAnabat:
+                gladiator = new Andabat("Анабат");
+                break;
+
+            case CommandToSetBestiary:
+                gladiator = new Bestiary("Бестиарий");
+                break;
+
+            case CommandToSetLekverary:
+                gladiator = new Lekveary("Лекверарий");
+                break;
+
+            case CommandToSetRetary:
+                gladiator = new Retiary("Ретарий");
+                break;
+
+            default:
+                gladiator = null;
+                break;
         }
 
-        Console.ReadKey();
+        if (gladiator is not null)
+            return true;
+
+        return false;
     }
 }
 
@@ -250,6 +343,8 @@ class Round
         const int MaxValue = 10;
         const int ThresholdValue = 3;
 
+        (int CurrentPositionX, int CurrentPositionY) = Console.GetCursorPosition();
+
         ConsoleColor defaultColor = Console.BackgroundColor;
         ConsoleColor fillColor = ConsoleColor.Green;
         ConsoleColor dangerouseColor = ConsoleColor.Yellow;
@@ -271,6 +366,7 @@ class Round
         Console.BackgroundColor = defaultColor;
         Console.Write(emptyBar);
         Console.Write(']');
-        Console.SetCursorPosition(0, yPosition + 1);
+
+        Console.SetCursorPosition(CurrentPositionX, CurrentPositionY);
     }
 }
