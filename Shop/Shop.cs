@@ -7,20 +7,8 @@
         const string CommandToBuy = "3";
         const string CommandToExit = "9";
 
-        Console.Write("Как зовут продавца: ");
-        Salesman salesman = new Salesman(Console.ReadLine());
-        salesman.AddProduct(new Product("Яблоко", 5));
-        salesman.AddProduct(new Product("Груша", 7));
-        salesman.AddProduct(new Product("Банан", 5));
-        salesman.AddProduct(new Product("Апельсин", 6));
-        salesman.AddProduct(new Product("Абрекос", 3));
-        salesman.AddProduct(new Product("Арбуз", 3));
-        salesman.AddProduct(new Product("Дыня", 4));
-        salesman.AddProduct(new Product("Вишня", 9));
-        salesman.AddProduct(new Product("Ананас", 11));
-
-        Console.Write("Как зовут покупателя: ");
-        string buyerName = Console.ReadLine();
+        
+        Salesman salesman = new Salesman();
 
         Console.Write("Сколько денег есть у пакупателя?: ");
 
@@ -31,7 +19,7 @@
             return ;
         }
 
-        Buyer buyer = new Buyer(buyerName, buersMoney);
+        Buyer buyer = new Buyer(buersMoney);
 
         Market market = new Market(salesman, buyer);
 
@@ -120,7 +108,10 @@ class Market
 
 class Salesman : Person
 {
-    public Salesman(string name) : base(name) { }
+    public Salesman() : base() 
+    {
+        FillProducts();
+    }
 
     public void AddProduct(Product product)
     {
@@ -139,11 +130,6 @@ class Salesman : Person
         return false;
     }
 
-    public bool CanSell(Product product)
-    {
-        return _products.Contains(product);
-    }
-
     public bool TryGetProduct(int id, out Product product)
     {
         foreach (Product productForSale in _products)
@@ -160,11 +146,24 @@ class Salesman : Person
 
         return false;
     }
+
+    private void FillProducts()
+    {
+        AddProduct(new Product("Яблоко", 5));
+        AddProduct(new Product("Груша", 7));
+        AddProduct(new Product("Банан", 5));
+        AddProduct(new Product("Апельсин", 6));
+        AddProduct(new Product("Абрекос", 3));
+        AddProduct(new Product("Арбуз", 3));
+        AddProduct(new Product("Дыня", 4));
+        AddProduct(new Product("Вишня", 9));
+        AddProduct(new Product("Ананас", 11));
+    }
 }
 
 class Buyer : Person
 {
-    public Buyer(string name, int defaultMoney) : base(name)
+    public Buyer(int defaultMoney) : base()
     {
         _wallet = defaultMoney;
     }
@@ -186,16 +185,9 @@ class Person
     protected List<Product> _products = new List<Product>();
     protected int _wallet;
 
-    public Person(string name)
-    {
-        Name = name;
-    }
-
-    public string Name { get; protected set; }
-
     public void ShowProducts()
     {
-        Console.WriteLine($"\nПродукты у {Name}:");
+        Console.WriteLine($"\nПродукты: ");
         foreach (Product product in _products)
             Console.WriteLine($"{product.Id} - {product.Name} ({product.Price})");
     }
