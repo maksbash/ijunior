@@ -14,14 +14,18 @@ internal class Program
         Console.Clear();
         Console.WriteLine("Добро пожаловать в управление железной дорогой!");
 
-        Reilway reilwaiy = new Reilway();
+        Reilway reilway = new Reilway();
         bool isActive = true;
 
         while (isActive)
         {
-            reilwaiy.PrintTrainsOnTheWay();
+            reilway.PrintTrainsOnTheWay();
 
-            printMenu();
+            Console.WriteLine("\nМеню управления: ");
+            Console.WriteLine($"{CommandToAddTrain} - добавить новый поезд");
+            Console.WriteLine($"{CommandToDepartTrain} - отправить поезд");
+            Console.WriteLine($"{CommandToShowAllTrain} - показать все поезда");
+            Console.WriteLine($"{CommandToExit} - выход из игры");
 
             Console.Write("Ваш выбор: ");
             string currentCommand = Console.ReadLine();
@@ -29,15 +33,15 @@ internal class Program
             switch (currentCommand)
             {
                 case CommandToAddTrain:
-                    reilwaiy.AddTrain();
+                    reilway.AddTrain();
                     break;
 
                 case CommandToDepartTrain:
-                    reilwaiy.DepartTrain();
+                    reilway.TryDepartTrain();
                     break;
 
                 case CommandToShowAllTrain:
-                    reilwaiy.Print();
+                    reilway.Print();
                     break;
 
                 case CommandToExit:
@@ -48,26 +52,12 @@ internal class Program
             Console.WriteLine("Нажмите любую клавишу для продолжения...");
             Console.ReadKey();
         }
-
-        void printMenu()
-        {
-            Console.WriteLine("\nМеню управления: ");
-            Console.WriteLine($"{CommandToAddTrain} - добавить новый поезд");
-            Console.WriteLine($"{CommandToDepartTrain} - отправить поезд");
-            Console.WriteLine($"{CommandToShowAllTrain} - показать все поезда");
-            Console.WriteLine($"{CommandToExit} - выход из игры");
-        }
     }
 }
 
 class Reilway
 {
     private List<Train> _trains = new List<Train>();
-
-    public void Manage()
-    {
-        
-    }
 
     public void AddTrain()
     {
@@ -77,14 +67,9 @@ class Reilway
         _trains.Add(train);
     }
 
-    public void DepartTrain()
+    public void TryDepartTrain()
     {
-        Console.Clear();
-        foreach (Train train in _trains)
-        {
-            if (train.IsDepart == false)
-                train.Print();
-        }
+        PrintTrainsInTheRailway();
 
         int id = -1;
         bool isActive = false;
@@ -102,19 +87,7 @@ class Reilway
 
         } while (isActive);
 
-        if (TryGetTrain(id, out Train trainForDepart))
-        {
-            if (trainForDepart.IsDepart)
-            {
-                Console.WriteLine("Поезд нельзя отправить повторно");
-            }
-            else
-            {
-                trainForDepart.Depart();
-                Console.WriteLine("Поезд отправлен");
-            }
-        }
-
+        DepartTrain(id);
     }
 
     public void PrintTrainsOnTheWay()
@@ -136,6 +109,33 @@ class Reilway
             train.Print();
     }
 
+    private void PrintTrainsInTheRailway()
+    {
+        Console.Clear();
+
+        foreach (Train train in _trains)
+        {
+            if (train.IsDepart == false)
+                train.Print();
+        }
+    }
+
+    private void DepartTrain(int id)
+    {
+        if (TryGetTrain(id, out Train trainForDepart))
+        {
+            if (trainForDepart.IsDepart)
+            {
+                Console.WriteLine("Поезд нельзя отправить повторно");
+            }
+            else
+            {
+                trainForDepart.Depart();
+                Console.WriteLine("Поезд отправлен");
+            }
+        }
+    }
+
     private bool TryGetTrain(int id, out Train train)
     {
         foreach (Train currentTrain in _trains)
@@ -154,6 +154,7 @@ class Reilway
     private int SoldTickets()
     {
         int tickets = -1;
+
         while (tickets <= 0)
         {
             Console.Clear();
@@ -226,6 +227,7 @@ class Train
     private string GetDescription()
     {
         string status;
+
         if (IsDepart)
             status = "поезд в пути";
         else 
