@@ -233,7 +233,14 @@ class Train
         else 
             status = "позд не отправлен";
 
-        return $"{Id}. {Departure}\t-\t{Arrival}. Статус: {status}";
+        string trainCars = "";
+        int numberOfTranCar = 0;
+
+        foreach (TrainCar train in _trainCars)
+            trainCars += $"Вагон {++numberOfTranCar} " +
+                $"занято {train.NumberOfPlaces} мест. ";
+
+        return $"{Id}. {Departure}\t-\t{Arrival}. Статус: {status}. {trainCars}";
     }
 }
 
