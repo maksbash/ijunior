@@ -2,13 +2,24 @@
 {
     private static void Main(string[] args)
     {
+        new Market();
+    }
+}
+
+class Market
+{
+    private Salesman _salesman;
+    private Buyer _buyer;
+
+    public Market()
+    {
         const string CommandToShowSalesmanProducts = "1";
         const string CommandToShowBuerProducts = "2";
         const string CommandToBuy = "3";
         const string CommandToExit = "9";
 
-        
-        Salesman salesman = new Salesman();
+
+        _salesman = new Salesman();
 
         Console.Write("Сколько денег есть у пакупателя?: ");
 
@@ -16,12 +27,10 @@
         {
             Console.WriteLine("\nВведено неверное значение! Попробуй ещё раз");
             Console.ReadKey();
-            return ;
+            return;
         }
 
-        Buyer buyer = new Buyer(buersMoney);
-
-        Market market = new Market(salesman, buyer);
+        _buyer = new Buyer(buersMoney);
 
         bool isActive = true;
 
@@ -43,15 +52,15 @@
             switch (currentCommand)
             {
                 case CommandToShowSalesmanProducts:
-                    salesman.ShowProducts();
+                    _salesman.ShowProducts();
                     break;
 
                 case CommandToShowBuerProducts:
-                    buyer.ShowProducts();
+                    _buyer.ShowProducts();
                     break;
 
                 case CommandToBuy:
-                    market.Offer();
+                    Offer();
                     break;
 
                 case CommandToExit:
@@ -67,42 +76,28 @@
             Console.ReadKey();
         }
     }
-}
+    
 
-class Market
-{
-    private Salesman _salesman;
-    private Buyer _buyer;
-
-    public Market(Salesman salesman, Buyer buyer)
-    {
-        _salesman = salesman;
-        _buyer = buyer;
-    }
-
-    public void Offer()
+    private void Offer()
     {
         _salesman.ShowProducts();
 
         Console.Write("Введите Id продукта для покупки: ");
         int.TryParse(Console.ReadLine(), out int id);
 
-        if (_salesman.TryGetProduct(id, out Product product))
-            Deal(product);
+        if (id > 0)
+            if (_salesman.TryGetProduct(id, out Product product))
+                Deal(product);
 
     }
 
-    private bool Deal(Product product)
+    private void Deal(Product product)
     {
         if (_buyer.CanBuy(product.Price))
         {
             _salesman.Sell(product);
             _buyer.Buy(product);
-
-            return true;
         }
-
-        return false;
     }
 }
 
@@ -113,21 +108,12 @@ class Salesman : Person
         FillProducts();
     }
 
-    public void AddProduct(Product product)
-    {
-        _products.Add(product);
-    }
-
-    public bool Sell(Product product)
+    public void Sell(Product product)
     {
         if (_products.Remove(product))
         {
             _wallet += product.Price;
-
-            return true;
         }
-
-        return false;
     }
 
     public bool TryGetProduct(int id, out Product product)
@@ -149,15 +135,15 @@ class Salesman : Person
 
     private void FillProducts()
     {
-        AddProduct(new Product("Яблоко", 5));
-        AddProduct(new Product("Груша", 7));
-        AddProduct(new Product("Банан", 5));
-        AddProduct(new Product("Апельсин", 6));
-        AddProduct(new Product("Абрекос", 3));
-        AddProduct(new Product("Арбуз", 3));
-        AddProduct(new Product("Дыня", 4));
-        AddProduct(new Product("Вишня", 9));
-        AddProduct(new Product("Ананас", 11));
+        _products.Add(new Product("Яблоко", 5));
+        _products.Add(new Product("Груша", 7));
+        _products.Add(new Product("Банан", 5));
+        _products.Add(new Product("Апельсин", 6));
+        _products.Add(new Product("Абрекос", 3));
+        _products.Add(new Product("Арбуз", 3));
+        _products.Add(new Product("Дыня", 4));
+        _products.Add(new Product("Вишня", 9));
+        _products.Add(new Product("Ананас", 11));
     }
 }
 
