@@ -2,7 +2,8 @@
 {
     private static void Main(string[] args)
     {
-        new Market();
+        Market market = new Market();
+        market.StartShop(); 
     }
 }
 
@@ -11,15 +12,12 @@ class Market
     private Salesman _salesman;
     private Buyer _buyer;
 
-    public Market()
+    public void StartShop()
     {
         const string CommandToShowSalesmanProducts = "1";
         const string CommandToShowBuerProducts = "2";
         const string CommandToBuy = "3";
         const string CommandToExit = "9";
-
-
-        _salesman = new Salesman();
 
         Console.Write("Сколько денег есть у пакупателя?: ");
 
@@ -30,6 +28,7 @@ class Market
             return;
         }
 
+        _salesman = new Salesman();
         _buyer = new Buyer(buersMoney);
 
         bool isActive = true;
@@ -76,28 +75,26 @@ class Market
             Console.ReadKey();
         }
     }
-    
 
     private void Offer()
     {
         _salesman.ShowProducts();
 
-        Console.Write("Введите Id продукта для покупки: ");
-        int.TryParse(Console.ReadLine(), out int id);
+        GetId(out int id);
 
         if (id > 0)
             if (_salesman.TryGetProduct(id, out Product product))
-                Deal(product);
-
+                if (_buyer.CanBuy(product.Price))
+                {
+                    _salesman.Sell(product);
+                    _buyer.Buy(product);
+                }
     }
 
-    private void Deal(Product product)
+    private void GetId(out int id)
     {
-        if (_buyer.CanBuy(product.Price))
-        {
-            _salesman.Sell(product);
-            _buyer.Buy(product);
-        }
+        Console.Write("Введите Id продукта для покупки: ");
+        int.TryParse(Console.ReadLine(), out id);
     }
 }
 
@@ -174,6 +171,7 @@ class Person
     public void ShowProducts()
     {
         Console.WriteLine($"\nПродукты: ");
+
         foreach (Product product in _products)
             Console.WriteLine($"{product.Id} - {product.Name} ({product.Price})");
     }
@@ -181,13 +179,13 @@ class Person
 
 class Product
 {
-    private static int _lastId = -1;
+    private static int s_lastId = -1;
 
     public Product(string name, int price)
     {
         Name = name;
         Price = price;
-        Id = ++_lastId;
+        Id = ++s_lastId;
     }
 
     public int Id { get; private set; }
