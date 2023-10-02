@@ -3,7 +3,7 @@
     private static void Main(string[] args)
     {
         Market market = new Market();
-        market.StartShop(); 
+        market.Run(); 
     }
 }
 
@@ -12,7 +12,7 @@ class Market
     private Salesman _salesman;
     private Buyer _buyer;
 
-    public void StartShop()
+    public void Run() 
     {
         const string CommandToShowSalesmanProducts = "1";
         const string CommandToShowBuerProducts = "2";
@@ -59,7 +59,7 @@ class Market
                     break;
 
                 case CommandToBuy:
-                    Offer();
+                    Trade();
                     break;
 
                 case CommandToExit:
@@ -76,25 +76,31 @@ class Market
         }
     }
 
-    private void Offer()
+    private void Trade()
     {
         _salesman.ShowProducts();
 
-        GetId(out int id);
+        int id = GetId();
 
         if (id > 0)
+        {
             if (_salesman.TryGetProduct(id, out Product product))
+            {
                 if (_buyer.CanBuy(product.Price))
                 {
                     _salesman.Sell(product);
                     _buyer.Buy(product);
                 }
+            }
+        }
     }
 
-    private void GetId(out int id)
+    private int GetId()
     {
         Console.Write("Введите Id продукта для покупки: ");
-        int.TryParse(Console.ReadLine(), out id);
+        int.TryParse(Console.ReadLine(), out int id);
+
+        return id;
     }
 }
 
