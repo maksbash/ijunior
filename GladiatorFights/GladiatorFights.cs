@@ -13,12 +13,12 @@ class Game
 {
     public void ShowMenu()
     {
-        int gladiatorOneXPosition = 0;
-        int gladiatorTwoXPosition = 50;
-        int gladiatorsYPosition = 2;
+        int firstGladiatorPositionX = 0;
+        int secondGladiatorPositionX = 50;
+        int gladiatorsPositionY = 2;
+        int gladiatorsShiftPositionY = 2;
 
         int sleepTime = 500;
-        int dividerForBar = 10;
 
         Gladiator[] gladiators = {
             new Gaal("Гал"),
@@ -43,16 +43,10 @@ class Game
                 index++;
             }
 
-            Console.Write("Введите номер 1-го гладиатора: ");
-
-            int gladiatorIndex;
-            int.TryParse(Console.ReadLine(), out gladiatorIndex);
-            gladiatorOne = (Gladiator)gladiators[--gladiatorIndex].Clone();
-
-            Console.Write("Введите номер 2-го гладиатора: ");
-
-            int.TryParse(Console.ReadLine(), out gladiatorIndex);
-            gladiatorTwo = (Gladiator)gladiators[--gladiatorIndex].Clone();
+            int indexFirstGladiator = 1;
+            int indexSecondGladiator = 2;
+            gladiatorOne = SelectGladiator(indexFirstGladiator, gladiators);
+            gladiatorTwo = SelectGladiator(indexSecondGladiator, gladiators);
 
             isActive = false;
 
@@ -60,31 +54,31 @@ class Game
             Console.WriteLine("Дерутся следующие гладиаторы: ");
             Console.WriteLine(gladiatorOne.GetDescription());
             Console.WriteLine(gladiatorTwo.GetDescription());
-            gladiatorsYPosition += 2;
+            gladiatorsPositionY += gladiatorsShiftPositionY;
 
-            Console.SetCursorPosition(gladiatorOneXPosition, gladiatorsYPosition);
+            Console.SetCursorPosition(firstGladiatorPositionX, gladiatorsPositionY);
             Console.Write($"{gladiatorOne.Name}");
-            Console.SetCursorPosition(gladiatorTwoXPosition, gladiatorsYPosition++);
+            Console.SetCursorPosition(secondGladiatorPositionX, gladiatorsPositionY++);
             Console.Write($"{gladiatorTwo.Name}");
 
-            float defaultHelthOne = gladiatorOne.Health / dividerForBar;
-            float defaultHelthTwo = gladiatorTwo.Health / dividerForBar;
+            float defaultHelthOne = gladiatorOne.Health;
+            float defaultHelthTwo = gladiatorTwo.Health;
 
             Console.WriteLine();
             while (gladiatorOne.Health > 0 && gladiatorTwo.Health > 0)
             {
                 Bar bar = new Bar();
-                bar.DrawBar((int)(gladiatorOne.Health / defaultHelthOne), gladiatorOneXPosition, gladiatorsYPosition);
-                bar.DrawBar((int)(gladiatorTwo.Health / defaultHelthTwo), gladiatorTwoXPosition, gladiatorsYPosition);
+                bar.DrawBar((int)gladiatorOne.Health, (int)defaultHelthOne, firstGladiatorPositionX, gladiatorsPositionY);
+                bar.DrawBar((int)gladiatorTwo.Health, (int)defaultHelthTwo, secondGladiatorPositionX, gladiatorsPositionY);
 
                 Console.WriteLine();
                 (int CurrentPositionX, int CurrentPositionY) = Console.GetCursorPosition();
 
                 gladiatorOne.TakeDamage(gladiatorTwo.Damage);
                 gladiatorTwo.TakeDamage(gladiatorOne.Damage);
-                Console.SetCursorPosition(gladiatorOneXPosition, CurrentPositionY);
+                Console.SetCursorPosition(firstGladiatorPositionX, CurrentPositionY);
                 Console.Write($"{gladiatorOne.Health}");
-                Console.SetCursorPosition(gladiatorTwoXPosition, CurrentPositionY++);
+                Console.SetCursorPosition(secondGladiatorPositionX, CurrentPositionY++);
                 Console.Write($"{gladiatorTwo.Health}");
 
                 Thread.Sleep(sleepTime);
@@ -102,12 +96,31 @@ class Game
             Console.ReadKey();
         }
     }
+
+    private Gladiator SelectGladiator(int gladiatorNumber, Gladiator[] gladiators)
+    {
+        Console.Write($"Введите номер {gladiatorNumber}-го гладиатора: ");
+
+        int.TryParse(Console.ReadLine(), out int gladiatorIndex);
+        gladiatorIndex--;
+
+        if (gladiatorIndex >= 0 && gladiatorIndex < gladiators.Length)
+        {
+            return (Gladiator)gladiators[gladiatorIndex].Clone();
+        }
+        else
+        {
+            Console.WriteLine("Введено некорректное значение, попробуйте ещё раз");
+            return SelectGladiator(gladiatorNumber, gladiators);
+        }
+    }
 }
 
 class Retiary : Gladiator, ICloneable
 {
     private int _fishnetPeriod = 10;
     private int fightCounter = 0;
+    private float damageDelimeter = 2f;
 
     public Retiary(string name) : base(name) { }
 
@@ -121,7 +134,7 @@ class Retiary : Gladiator, ICloneable
     override public void TakeDamage(float damage)
     {
         if (fightCounter % _fishnetPeriod == 0)
-            _armor /= 2f;
+            _armor /= damageDelimeter;
         else
             Health -= damage - _armor;
 
@@ -151,13 +164,6 @@ class Lekveary : Gladiator, ICloneable
         ApplyLasso();
     }
 
-    override public void ShowStats()
-    {
-        ShowInfo();
-        Console.Write($", лассо (+{_lassoDamage} к атаке " +
-            $"на каждом {lassoFightPeriod} ударе.)");
-    }
-
     override public float Damage
     {
         get
@@ -167,6 +173,13 @@ class Lekveary : Gladiator, ICloneable
 
             return _damge;
         }
+    }
+
+    override public void ShowStats()
+    {
+        ShowInfo();
+        Console.Write($", лассо (+{_lassoDamage} к атаке " +
+            $"на каждом {lassoFightPeriod} ударе.)");
     }
 
     override public string GetDescription()
@@ -208,7 +221,9 @@ class Bestiary : Gladiator, ICloneable
     override public void ShowStats()
     {
         ShowInfo();
-        Console.Write($", кинжал (+ к атаке {(_dagger * 100).ToString("F1")}%)");
+        int multiplyerForPercent = 100;
+        Console.Write($", кинжал (+ к атаке " +
+            $"{(_dagger * multiplyerForPercent).ToString("F1")}%)");
     }
 
     override public string GetDescription()
@@ -247,7 +262,9 @@ class Andabat : Gladiator, ICloneable
     override public void ShowStats()
     {
         ShowInfo();
-        Console.Write($", кольчуга (+ к броне {(_chainArmor * 100).ToString("F1")}%)");
+        int multiplyerForPercent = 100;
+        Console.Write($", кольчуга (+ к броне " +
+            $"{(_chainArmor * multiplyerForPercent).ToString("F1")}%)");
     }
 
     override public string GetDescription()
@@ -343,10 +360,11 @@ abstract class Gladiator: ICloneable
 class Bar
 {
 
-    public void DrawBar(int value, int xPosition, int yPosition)
+    public void DrawBar(int health, int defaultHealth, int xPosition, int yPosition)
     {
         const int MaxValue = 10;
         const int ThresholdValue = 3;
+        int value = health / (defaultHealth / MaxValue);
 
         (int CurrentPositionX, int CurrentPositionY) = Console.GetCursorPosition();
 
