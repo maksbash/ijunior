@@ -124,6 +124,8 @@ class Retiary : Gladiator, ICloneable
             _armor /= 2f;
         else
             Health -= damage - _armor;
+
+        fightCounter++;
     }
 
     override public string GetDescription()
