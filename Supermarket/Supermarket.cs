@@ -11,11 +11,16 @@
 
 class Supermarket
 {
-    private Queue<Buyer> _buyers = new Queue<Buyer>();
-    private List<Product> _products = new List<Product>();
+    private Queue<Buyer> _buyers;
+    private List<Product> _products;
+    private Random _random;
 
     public Supermarket()
     {
+        _buyers = new Queue<Buyer>();
+        _products = new List<Product>();
+        _random = new Random();
+
         FillProducts();
         CreateBuyers();
     }
@@ -30,8 +35,8 @@ class Supermarket
     {
         int minBuyers = 2;
         int maxBuyers = 10;
-        Random random = new Random();
-        int countBuyers = random.Next(minBuyers, maxBuyers + 1);
+        
+        int countBuyers = _random.Next(minBuyers, maxBuyers + 1);
 
         for (int i = 0; i <= countBuyers; i++)
             _buyers.Enqueue(GetBuyer());
@@ -39,15 +44,14 @@ class Supermarket
 
     private Buyer GetBuyer()
     {
-        Random random = new Random();
         List<Product> products = new List<Product>();
-        int countProducts = random.Next(1, _products.Count + 1);
+        int countProducts = _random.Next(1, _products.Count + 1);
         
         int fullPriceOfProducts = 0;
 
         for (int i = 0; i < countProducts; i++)
         {
-            int randomIndexOfProduct = random.Next(0, _products.Count);
+            int randomIndexOfProduct = _random.Next(0, _products.Count);
             products.Add(_products[randomIndexOfProduct]);
             fullPriceOfProducts += _products[randomIndexOfProduct].Price;
         }
@@ -55,10 +59,9 @@ class Supermarket
         int hitPercent = 10;
         int minMoney = fullPriceOfProducts - (fullPriceOfProducts / hitPercent);
         int maxMoney = fullPriceOfProducts + (fullPriceOfProducts / hitPercent);
-        int money = random.Next(minMoney, maxMoney);
+        int money = _random.Next(minMoney, maxMoney);
 
         return new Buyer(money, products);
-
     }
 
     private void FillProducts()
@@ -91,12 +94,13 @@ class Buyer
 {
     private static int s_lastId = -1;
 
-    private List<Product> _products = new List<Product>();
+    private List<Product> _products;
     private int _wallet;
     private int _id;
 
     public Buyer(int money, List<Product> products) : base()
     {
+        _products = new List<Product>();
         _id = ++s_lastId;
         _wallet = money;
         _products = products;
@@ -119,7 +123,7 @@ class Buyer
         Console.WriteLine();
     }
 
-    public void ShowProducts()
+    private void ShowProducts()
     {
         foreach (Product product in _products)
             Console.WriteLine($"Покупатель {_id} - {product.Name} ({product.Price})");
