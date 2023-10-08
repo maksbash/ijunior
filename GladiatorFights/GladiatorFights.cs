@@ -13,9 +13,9 @@ class Game
 {
     public void ShowMenu()
     {
-        int GladiatorOneXPosition = 0;
-        int GladiatorTwoXPosition = 50;
-        int GladiatorsYPosition = 2;
+        int gladiatorOneXPosition = 0;
+        int gladiatorTwoXPosition = 50;
+        int gladiatorsYPosition = 2;
 
         int sleepTime = 500;
         int dividerForBar = 10;
@@ -38,7 +38,10 @@ class Game
             int index = 1;
 
             foreach (Gladiator gladiator in gladiators)
-                Console.WriteLine(index++ + ". " + gladiator.GetDescription());
+            {
+                Console.WriteLine(index + ". " + gladiator.GetDescription());
+                index++;
+            }
 
             Console.Write("Введите номер 1-го гладиатора: ");
 
@@ -57,11 +60,11 @@ class Game
             Console.WriteLine("Дерутся следующие гладиаторы: ");
             Console.WriteLine(gladiatorOne.GetDescription());
             Console.WriteLine(gladiatorTwo.GetDescription());
-            GladiatorsYPosition += 2;
+            gladiatorsYPosition += 2;
 
-            Console.SetCursorPosition(GladiatorOneXPosition, GladiatorsYPosition);
+            Console.SetCursorPosition(gladiatorOneXPosition, gladiatorsYPosition);
             Console.Write($"{gladiatorOne.Name}");
-            Console.SetCursorPosition(GladiatorTwoXPosition, GladiatorsYPosition++);
+            Console.SetCursorPosition(gladiatorTwoXPosition, gladiatorsYPosition++);
             Console.Write($"{gladiatorTwo.Name}");
 
             float defaultHelthOne = gladiatorOne.Health / dividerForBar;
@@ -71,17 +74,17 @@ class Game
             while (gladiatorOne.Health > 0 && gladiatorTwo.Health > 0)
             {
                 Bar bar = new Bar();
-                bar.DrawBar((int)(gladiatorOne.Health / defaultHelthOne), GladiatorOneXPosition, GladiatorsYPosition);
-                bar.DrawBar((int)(gladiatorTwo.Health / defaultHelthTwo), GladiatorTwoXPosition, GladiatorsYPosition);
+                bar.DrawBar((int)(gladiatorOne.Health / defaultHelthOne), gladiatorOneXPosition, gladiatorsYPosition);
+                bar.DrawBar((int)(gladiatorTwo.Health / defaultHelthTwo), gladiatorTwoXPosition, gladiatorsYPosition);
 
                 Console.WriteLine();
                 (int CurrentPositionX, int CurrentPositionY) = Console.GetCursorPosition();
 
                 gladiatorOne.TakeDamage(gladiatorTwo.Damage);
                 gladiatorTwo.TakeDamage(gladiatorOne.Damage);
-                Console.SetCursorPosition(GladiatorOneXPosition, CurrentPositionY);
+                Console.SetCursorPosition(gladiatorOneXPosition, CurrentPositionY);
                 Console.Write($"{gladiatorOne.Health}");
-                Console.SetCursorPosition(GladiatorTwoXPosition, CurrentPositionY++);
+                Console.SetCursorPosition(gladiatorTwoXPosition, CurrentPositionY++);
                 Console.Write($"{gladiatorTwo.Health}");
 
                 Thread.Sleep(sleepTime);
