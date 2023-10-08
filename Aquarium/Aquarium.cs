@@ -107,6 +107,7 @@ class Aquarium
         {
             Console.WriteLine($"В аквариуме максимальное количество рыб - " +
                 $"{_maximumFishes}");
+            Console.ReadKey();
 
             return;
         }
@@ -118,7 +119,7 @@ class Aquarium
         fishIndex--;
 
         if (fishIndex >= 0 && fishIndex < _fishes.Length)
-            Fishes.Add(_fishes[fishIndex]);
+            Fishes.Add((Fish)_fishes[fishIndex].Clone());
         else
             Console.WriteLine("Ошибка при вводе");
     }
@@ -162,12 +163,14 @@ class Aquarium
 
 class Fish : ICloneable
 {
+    private Random _random = new Random();
+
     public Fish(string type)
     {
         int minimumHelth = 3;
         int maximumHelth = 10;
-        Random random = new Random();
-        Helth = random.Next(minimumHelth, maximumHelth + 1);
+        
+        Helth = _random.Next(minimumHelth, maximumHelth + 1);
         Type = type;
     }
 
