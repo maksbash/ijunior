@@ -1,4 +1,6 @@
-﻿internal partial class Program
+﻿using System.Threading;
+
+internal partial class Program
 {
     private static void Main(string[] args)
     {
@@ -22,7 +24,7 @@ class War
         Random random = new Random();
         int whoIsFirst = random.Next(0, 2);
 
-        while (firstTroop.Warriors.Count > 0 && secondTroop.Warriors.Count > 0)
+        while (firstTroop.WarriorsCount > 0 && secondTroop.WarriorsCount > 0)
         {
             if (_fightNumber % 2 == whoIsFirst)
                 Fight(secondTroop, firstTroop);
@@ -30,15 +32,20 @@ class War
                 Fight(firstTroop, secondTroop);
 
             Console.WriteLine($"После сражения номер {_fightNumber} в первом " +
-                $"войске осталось {firstTroop.Warriors.Count} бойца(ов), " +
-                $"во втором {secondTroop.Warriors.Count}");
+                $"войске осталось {firstTroop.WarriorsCount} бойца(ов), " +
+                $"во втором {secondTroop.WarriorsCount}");
 
             _fightNumber++;
         }
 
-        if (firstTroop.Warriors.Count > 0)
+        ShowResult(firstTroop, secondTroop);
+    }
+
+    private void ShowResult(Troop firstTroop, Troop secondTroop)
+    {
+        if (firstTroop.WarriorsCount > 0)
             Console.WriteLine("Победа первого войска");
-        else if (secondTroop.Warriors.Count > 0)
+        else if (secondTroop.WarriorsCount > 0)
             Console.WriteLine("Победа второго войска");
         else
             Console.WriteLine("Ничья");
@@ -48,32 +55,40 @@ class War
     {
         Random random = new Random();
 
-        foreach (Warrior warrior in troop1.Warriors)
+        for (int i = 0; i < troop1.WarriorsCount; i++)
         {
-            int enemyNumber = random.Next(0, troop2.Warriors.Count);
-
-            if (troop2.Warriors.Count > 0)
+            int enemyNumber = random.Next(0, troop2.WarriorsCount);
+            if (troop2.WarriorsCount > 0)
             {
-                troop2.Warriors[enemyNumber].TakeDamage(warrior.Damage);
-                troop2.removeIfDead();
+                troop2.GetWarrior(enemyNumber).TakeDamage(troop1.GetWarrior(i).DamageValue);
+                troop2.RemoveDeadSoldiers();
             }
         }
 
-        troop1.removeIfDead();
+        troop1.RemoveDeadSoldiers();
     }  
 }
 
 class Troop
 {
+    private List<Warrior> Warriors;
     public Troop(int numberOfWarriors)
     {
         Warriors = new List<Warrior>();
         SetRandomWarriors(numberOfWarriors);
     }
 
-    public List<Warrior> Warriors { get; private set; }
+    public int WarriorsCount
+    {
+        get { return Warriors.Count; }
+    }
 
-    public void removeIfDead()
+    public Warrior GetWarrior(int index)
+    {
+        return Warriors[index];
+    }
+
+    public void RemoveDeadSoldiers()
     {
         for (int i = Warriors.Count - 1; i >= 0; i--)
             if (Warriors[i].Health <= 0)
@@ -105,34 +120,35 @@ class Troop
 class Retiary : Warrior, ICloneable
 {
     private int _fishnetPeriod = 10;
-    private int fightCounter = 0;
+    private int _fightCounter = 0;
+    private float _armorDelimeter = 2f;
 
     public Retiary(string name) : base(name) { }
 
-    override public void ShowStats()
+    public override void ShowStats()
     {
         ShowInfo();
         Console.Write($", сеть (полностью отражает каждую {_fishnetPeriod} атаку " +
             $"но теряет половину брони.)");
     }
 
-    override public void TakeDamage(float damage)
+    public override void TakeDamage(float damage)
     {
-        if (fightCounter % _fishnetPeriod == 0)
-            _armor /= 2f;
+        if (_fightCounter % _fishnetPeriod == 0)
+            Armor /= _armorDelimeter;
         else
-            Health -= damage - _armor;
+            Health -= damage - Armor;
 
-        fightCounter++;
+        _fightCounter++;
     }
 
-    override public string GetDescription()
+    public override string GetDescription()
     {
         return $"Воин Ретиарий, сетью отражает каждый {_fishnetPeriod} " +
             $"удар, но теряет половину брони";
     }
 
-    override public object Clone()
+    public override object Clone()
     {
         return new Retiary(Name);
     }
@@ -140,8 +156,8 @@ class Retiary : Warrior, ICloneable
 
 class Lekveary : Warrior, ICloneable
 {
-    private int lassoFightPeriod = 3;
-    private int fightCounter = 0;
+    private int _lassoFightPeriod = 3;
+    private int _fightCounter = 0;
     private float _lassoDamage;
 
     public Lekveary(string name) : base(name)
@@ -149,30 +165,30 @@ class Lekveary : Warrior, ICloneable
         ApplyLasso();
     }
 
-    override public void ShowStats()
+    public override void ShowStats()
     {
         ShowInfo();
         Console.Write($", лассо (+{_lassoDamage} к атаке " +
-            $"на каждом {lassoFightPeriod} ударе.)");
+            $"на каждом {_lassoFightPeriod} ударе.)");
     }
 
-    override public float Damage
+    public override float DamageValue
     {
         get
         {
-            if (fightCounter % lassoFightPeriod == 0)
-                return _damage + _lassoDamage;
+            if (_fightCounter % _lassoFightPeriod == 0)
+                return Damage + _lassoDamage;
 
-            return _damage;
+            return Damage;
         }
     }
 
-    override public string GetDescription()
+    public override string GetDescription()
     {
-        return $"Воин Бестиарий, использует лассо каждый {lassoFightPeriod} удар";
+        return $"Воин Бестиарий, использует лассо каждый {_lassoFightPeriod} удар";
     }
 
-    override public object Clone()
+    public override object Clone()
     {
         return new Lekveary(Name);
     }
@@ -195,26 +211,26 @@ class Bestiary : Warrior, ICloneable
         SetDagger();
     }
 
-    override public float Damage
+    public override float DamageValue
     {
         get
         {
-            return _damage + _dagger;
+            return Damage + _dagger;
         }
     }
 
-    override public void ShowStats()
+    public override void ShowStats()
     {
         ShowInfo();
         Console.Write($", кинжал (+ к атаке {(_dagger * 100).ToString("F1")}%)");
     }
 
-    override public string GetDescription()
+    public override string GetDescription()
     {
         return "Воин Бестиарий, дополнительно нападает с кинжалом";
     }
 
-    override public object Clone()
+    public override object Clone()
     {
         return new Bestiary(Name);
     }
@@ -237,23 +253,23 @@ class Andabat : Warrior, ICloneable
         SetChainArmor();
     }
 
-    override public void TakeDamage(float damage)
+    public override void TakeDamage(float damage)
     {
-        Health -= damage - _armor - (_armor * _chainArmor);
+        Health -= damage - Armor - (Armor * _chainArmor);
     }
 
-    override public void ShowStats()
+    public override void ShowStats()
     {
         ShowInfo();
         Console.Write($", кольчуга (+ к броне {(_chainArmor * 100).ToString("F1")}%)");
     }
 
-    override public string GetDescription()
+    public override string GetDescription()
     {
         return "Воин Анабат, дополнительно защищается кольчугой";
     }
 
-    override public object Clone()
+    public override object Clone()
     {
         return new Andabat(Name);
     }
@@ -272,17 +288,17 @@ class Gaal : Warrior, ICloneable
 {
     public Gaal(string name) : base(name) { }
 
-    override public void ShowStats()
+    public override void ShowStats()
     {
         ShowInfo();
     }
 
-    override public string GetDescription()
+    public override string GetDescription()
     {
         return "Воин Гал, сильный и безпечный";
     }
 
-    override public object Clone()
+    public override object Clone()
     {
         return new Gaal(Name);
     }
@@ -290,8 +306,8 @@ class Gaal : Warrior, ICloneable
 
 abstract class Warrior : ICloneable
 {
-    protected float _armor;
-    protected float _damage;
+    protected float Armor;
+    protected float Damage;
 
     public Warrior(string name)
     {
@@ -300,11 +316,11 @@ abstract class Warrior : ICloneable
         int minArmor = 1;
         int maxArmor = 5;
         Random random = new Random();
-        _armor = (float)(random.Next(minArmor, maxArmor));
+        Armor = (float)(random.Next(minArmor, maxArmor));
 
         int minDamage = 10;
         int maxDamage = 22;
-        _damage = (float)(random.Next(minDamage, maxDamage));
+        Damage = (float)(random.Next(minDamage, maxDamage));
 
         int minHelth = 90;
         int maxHelth = 120;
@@ -314,23 +330,23 @@ abstract class Warrior : ICloneable
     public string Name { get; private set; }
     public float Health { get; protected set; }
 
-    virtual public float Damage
+    virtual public float DamageValue
     {
         get
         {
-            return _damage;
+            return Damage;
         }
     }
 
     protected void ShowInfo()
     {
         Console.Write($"\nВоин {Name}, здоровье {Health}, наносимый урон " +
-            $"{Damage}, броня {_armor}");
+            $"{DamageValue}, броня {Armor}");
     }
 
     public virtual void TakeDamage(float damage)
     {
-        Health -= damage - _armor;
+        Health -= damage - Armor;
     }
 
     abstract public void ShowStats();
