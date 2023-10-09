@@ -11,7 +11,7 @@ class Aquarium
 {
     private int _minimumFishes = 2;
     private int _maximumFishes = 10;
-    private Fish[] _fishes =
+    private Fish[] _availebleFishes =
         {
             new Fish("Данио леопардовый"),
             new Fish("Барбус вишневый"),
@@ -20,14 +20,13 @@ class Aquarium
             new Fish("Хомалоптера Стефенсона"),
             new Fish("Рэнчу красная"),
         };
+    private List<Fish> _fishes;
 
     public Aquarium()
     {
-        Fishes = new List<Fish>();
-        RandomFill();
+        _fishes = new List<Fish>();
+        FillRandom();
     }
-
-    public List<Fish> Fishes { get; private set; }
 
     public void ShowMenu()
     {
@@ -77,33 +76,33 @@ class Aquarium
         }
     }
 
-    public void ShowFishes()
+    private void ShowFishes()
     {
         int index = 1;
 
-        foreach (Fish fish in Fishes)
+        foreach (Fish fish in _fishes)
         {
             Console.WriteLine($"{index}. {fish.Type}, здоровье {fish.Helth}");
             index++;
         }
     }
 
-    public void NextIteration()
+    private void NextIteration()
     {
-        for (int i = 0; i < Fishes.Count; i++)
+        for (int i = _fishes.Count - 1; i >= 0; i--)
         {
-            Fishes[i].GrowOld();
+            _fishes[i].GrowOld();
 
-            if (Fishes[i].Helth == 0)
-                Fishes.RemoveAt(i);
+            if (_fishes[i].Helth == 0)
+                _fishes.RemoveAt(i);
         }
     }
 
-    public void AddFish()
+    private void AddFish()
     {
         Console.Clear();
 
-        if (Fishes.Count >= 10)
+        if (_fishes.Count >= _maximumFishes)
         {
             Console.WriteLine($"В аквариуме максимальное количество рыб - " +
                 $"{_maximumFishes}");
@@ -118,13 +117,13 @@ class Aquarium
         int.TryParse(Console.ReadLine(), out int fishIndex);
         fishIndex--;
 
-        if (fishIndex >= 0 && fishIndex < _fishes.Length)
-            Fishes.Add((Fish)_fishes[fishIndex].Clone());
+        if (fishIndex >= 0 && fishIndex < _availebleFishes.Length)
+            _fishes.Add((Fish)_availebleFishes[fishIndex].Clone());
         else
             Console.WriteLine("Ошибка при вводе");
     }
 
-    public void RemoveFish()
+    private void RemoveFish()
     {
         Console.Clear();
         ShowFishes();
@@ -133,8 +132,8 @@ class Aquarium
         int.TryParse(Console.ReadLine(), out int fishIndex);
         fishIndex--;
 
-        if (fishIndex >= 0 && fishIndex < Fishes.Count)
-            Fishes.RemoveAt(fishIndex);
+        if (fishIndex >= 0 && fishIndex < _fishes.Count)
+            _fishes.RemoveAt(fishIndex);
         else
             Console.WriteLine("Ошибка при вводе");
     }
@@ -143,20 +142,20 @@ class Aquarium
     {
         Console.WriteLine("Рыбки: ");
 
-        for (int i = 0; i < _fishes.Length; i++)
-            Console.WriteLine($"{i + 1} - {_fishes[i].Type}");
+        for (int i = 0; i < _availebleFishes.Length; i++)
+            Console.WriteLine($"{i + 1} - {_availebleFishes[i].Type}");
     }
 
-    private void RandomFill()
+    private void FillRandom()
     {
         Random random = new Random();
         int countFishes = random.Next(_minimumFishes, _maximumFishes + 1);
 
         for (int i = 0; i < countFishes; i++)
         {
-            int indexOfFish = random.Next(0, _fishes.Length);
-            Fish fish = (Fish)_fishes[indexOfFish].Clone();
-            Fishes.Add(fish);
+            int indexOfFish = random.Next(0, _availebleFishes.Length);
+            Fish fish = (Fish)_availebleFishes[indexOfFish].Clone();
+            _fishes.Add(fish);
         }
     }
 }
