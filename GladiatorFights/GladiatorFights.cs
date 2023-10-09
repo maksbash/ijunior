@@ -111,7 +111,7 @@ class Game
 
         if (gladiatorIndex >= 0 && gladiatorIndex < gladiators.Length)
         {
-            return (Gladiator)gladiators[gladiatorIndex].Clone();
+            return gladiators[gladiatorIndex].Clone();
         }
         else
         {
@@ -121,7 +121,7 @@ class Game
     }
 }
 
-class Retiary : Gladiator, ICloneable
+class Retiary : Gladiator
 {
     private int _fishnetPeriod = 10;
     private int _fightCounter = 0;
@@ -138,7 +138,9 @@ class Retiary : Gladiator, ICloneable
 
    public override void TakeDamage(float damage)
     {
-        if (_fightCounter % _fishnetPeriod == 0)
+        int parity = _fightCounter % _fishnetPeriod;
+
+        if (parity == 0)
             _armor /= _damageDelimeter;
         else
             Health -= damage - _armor;
@@ -152,13 +154,13 @@ class Retiary : Gladiator, ICloneable
             $"удар, но теряет половину брони";
     }
 
-   public override object Clone()
+   public override Retiary Clone()
     {
         return new Retiary(Name);
     }
 }
 
-class Lekveary : Gladiator, ICloneable
+class Lekveary : Gladiator
 {
     private int _lassoFightPeriod = 3;
     private int fightCounter = 0;
@@ -192,21 +194,21 @@ class Lekveary : Gladiator, ICloneable
         return $"Гладиатор Бестиарий, использует лассо каждый {_lassoFightPeriod} удар";
     }
 
-   public override object Clone()
+   public override Lekveary Clone()
     {
         return new Lekveary(Name);
     }
 
     private void ApplyLasso()
     {
-        Random random = new Random();
+
         float minDamage = 1f;
         float maxDamage = 5f;
-        _lassoDamage = (float)(random.NextDouble() * (maxDamage - minDamage) + minDamage);
+        _lassoDamage = (float)(UserUtils.NextDouble() * (maxDamage - minDamage) + minDamage);
     }
 }
 
-class Bestiary : Gladiator, ICloneable
+class Bestiary : Gladiator
 {
     private float _dagger;
 
@@ -236,21 +238,20 @@ class Bestiary : Gladiator, ICloneable
         return "Гладиатор Бестиарий, дополнительно нападает с кинжалом";
     }
 
-   public override object Clone()
+   public override Bestiary Clone()
     {
         return new Bestiary(Name);
     }
 
     private void SetDagger()
     {
-        Random random = new Random();
         float min = 0.09f;
         float max = 0.15f;
-        _dagger = (float)(random.NextDouble() * (max - min) + min);
+        _dagger = (float)(UserUtils.NextDouble() * (max - min) + min);
     }
 }
 
-class Andabat : Gladiator, ICloneable
+class Andabat : Gladiator
 {
     private float _chainArmor;
 
@@ -277,22 +278,21 @@ class Andabat : Gladiator, ICloneable
         return "Гладиатор Анабат, дополнительно защищается кольчугой";
     }
 
-   public override object Clone()
+   public override Andabat Clone()
     {
         return new Andabat(Name);
     }
 
     private void SetChainArmor()
     {
-        Random random = new Random();
         float min = 0.01f;
         float max = 0.2f;
-        _chainArmor = (float)(random.NextDouble() * (max - min) + min);
+        _chainArmor = (float)(UserUtils.NextDouble() * (max - min) + min);
     }
 
 }
 
-class Gaal : Gladiator, ICloneable
+class Gaal : Gladiator
 {
     public Gaal(string name) : base(name) { }
 
@@ -306,13 +306,13 @@ class Gaal : Gladiator, ICloneable
         return "Гладиатор Гал, сильный и безпечный";
     }
 
-   public override object Clone()
+   public override Gaal Clone()
     {
         return new Gaal(Name);
     }
 }
 
-abstract class Gladiator: ICloneable
+abstract class Gladiator
 {
     protected float _armor;
     protected float _damge;
@@ -323,22 +323,21 @@ abstract class Gladiator: ICloneable
 
         int minArmor = 1;
         int maxArmor = 5;
-        Random random = new Random();
-        _armor = (float)(random.Next(minArmor, maxArmor));
+        _armor = (float)(UserUtils.GenerateRandomNumber(minArmor, maxArmor));
 
         int minDamage = 10;
         int maxDamage = 22;
-        _damge = (float)(random.Next(minDamage, maxDamage));
+        _damge = (float)(UserUtils.GenerateRandomNumber(minDamage, maxDamage));
 
         int minHelth = 90;
         int maxHelth = 120;
-        Health = random.Next(minHelth, maxHelth);
+        Health = UserUtils.GenerateRandomNumber(minHelth, maxHelth);
     }
 
     public string Name { get; private set; }
     public float Health { get; protected set; }
 
-    virtual public float Damage
+    public virtual float Damage
     {
         get
         {
@@ -357,9 +356,9 @@ abstract class Gladiator: ICloneable
         Health -= damage - _armor;
     }
 
-    abstract public void ShowStats();
-    abstract public string GetDescription();
-    public abstract object Clone();
+    public abstract void ShowStats();
+    public abstract string GetDescription();
+    public abstract Gladiator Clone();
 }
 
 class Bar
@@ -396,5 +395,20 @@ class Bar
         Console.Write(']');
 
         Console.SetCursorPosition(CurrentPositionX, CurrentPositionY);
+    }
+}
+
+class UserUtils
+{
+    private static Random _random = new Random();
+
+    public static int GenerateRandomNumber(int min, int max)
+    {
+        return _random.Next(min, max);
+    }
+
+    public static float NextDouble()
+    {
+        return (float) _random.NextDouble();
     }
 }
