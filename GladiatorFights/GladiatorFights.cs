@@ -11,16 +11,8 @@ internal class Program
 
 class Game
 {
-    public void ShowMenu()
-    {
-        int firstGladiatorPositionX = 0;
-        int secondGladiatorPositionX = 50;
-        int gladiatorsPositionY = 2;
-        int gladiatorsShiftPositionY = 2;
-
-        int sleepTime = 500;
-
-        Gladiator[] gladiators = {
+    private Gladiator[] _gladiators =
+        {
             new Gaal("Гал"),
             new Andabat("Анабат"),
             new Bestiary("Bestiariy"),
@@ -28,72 +20,85 @@ class Game
             new Retiary("Ретарий")
         };
 
-        Gladiator gladiatorOne;
-        Gladiator gladiatorTwo;
-        bool isActive = true;
+    public void ShowMenu()
+    {
+        ShowExistsGladiators();
 
-        while (isActive)
+        int indexFirstGladiator = 1;
+        int indexSecondGladiator = 2;
+        Gladiator gladiatorOne = SelectGladiator(indexFirstGladiator, _gladiators);
+        Gladiator gladiatorTwo = SelectGladiator(indexSecondGladiator, _gladiators);
+
+        Figth(gladiatorOne, gladiatorTwo);
+
+        Console.WriteLine("\n");
+
+        if (gladiatorOne.Health > 0)
+            Console.WriteLine($"Победил гладиатор - {gladiatorOne.Name}");
+        else if (gladiatorTwo.Health > 0)
+            Console.WriteLine($"Победил гладиатор - {gladiatorTwo.Name}");
+        else
+            Console.WriteLine("Ничья!");
+
+        Console.ReadKey();
+        
+    }
+
+    private void Figth(Gladiator gladiatorOne, Gladiator gladiatorTwo)
+    {
+        int firstGladiatorPositionX = 0;
+        int secondGladiatorPositionX = 50;
+        int gladiatorsPositionY = 2;
+        int gladiatorsShiftPositionY = 2;
+
+        float defaultHelthOne = gladiatorOne.Health;
+        float defaultHelthTwo = gladiatorTwo.Health;
+
+        int sleepTime = 500;
+
+        gladiatorsPositionY += gladiatorsShiftPositionY;
+
+        Console.Clear();
+        Console.WriteLine("Дерутся следующие гладиаторы: ");
+        Console.WriteLine(gladiatorOne.GetDescription());
+        Console.WriteLine(gladiatorTwo.GetDescription());
+        gladiatorsPositionY += gladiatorsShiftPositionY;
+
+        Console.SetCursorPosition(firstGladiatorPositionX, gladiatorsPositionY);
+        Console.Write($"{gladiatorOne.Name}");
+        Console.SetCursorPosition(secondGladiatorPositionX, gladiatorsPositionY++);
+        Console.Write($"{gladiatorTwo.Name}");
+        Console.WriteLine();
+
+        while (gladiatorOne.Health > 0 && gladiatorTwo.Health > 0)
         {
-            Console.WriteLine("Гладиаторы: ");
-            int index = 1;
-
-            foreach (Gladiator gladiator in gladiators)
-            {
-                Console.WriteLine(index + ". " + gladiator.GetDescription());
-                index++;
-            }
-
-            int indexFirstGladiator = 1;
-            int indexSecondGladiator = 2;
-            gladiatorOne = SelectGladiator(indexFirstGladiator, gladiators);
-            gladiatorTwo = SelectGladiator(indexSecondGladiator, gladiators);
-
-            isActive = false;
-
-            Console.Clear();
-            Console.WriteLine("Дерутся следующие гладиаторы: ");
-            Console.WriteLine(gladiatorOne.GetDescription());
-            Console.WriteLine(gladiatorTwo.GetDescription());
-            gladiatorsPositionY += gladiatorsShiftPositionY;
-
-            Console.SetCursorPosition(firstGladiatorPositionX, gladiatorsPositionY);
-            Console.Write($"{gladiatorOne.Name}");
-            Console.SetCursorPosition(secondGladiatorPositionX, gladiatorsPositionY++);
-            Console.Write($"{gladiatorTwo.Name}");
-
-            float defaultHelthOne = gladiatorOne.Health;
-            float defaultHelthTwo = gladiatorTwo.Health;
+            Bar bar = new Bar();
+            bar.DrawBar((int)gladiatorOne.Health, (int)defaultHelthOne, firstGladiatorPositionX, gladiatorsPositionY);
+            bar.DrawBar((int)gladiatorTwo.Health, (int)defaultHelthTwo, secondGladiatorPositionX, gladiatorsPositionY);
 
             Console.WriteLine();
-            while (gladiatorOne.Health > 0 && gladiatorTwo.Health > 0)
-            {
-                Bar bar = new Bar();
-                bar.DrawBar((int)gladiatorOne.Health, (int)defaultHelthOne, firstGladiatorPositionX, gladiatorsPositionY);
-                bar.DrawBar((int)gladiatorTwo.Health, (int)defaultHelthTwo, secondGladiatorPositionX, gladiatorsPositionY);
+            (int CurrentPositionX, int CurrentPositionY) = Console.GetCursorPosition();
 
-                Console.WriteLine();
-                (int CurrentPositionX, int CurrentPositionY) = Console.GetCursorPosition();
+            gladiatorOne.TakeDamage(gladiatorTwo.Damage);
+            gladiatorTwo.TakeDamage(gladiatorOne.Damage);
+            Console.SetCursorPosition(firstGladiatorPositionX, CurrentPositionY);
+            Console.Write($"{gladiatorOne.Health}");
+            Console.SetCursorPosition(secondGladiatorPositionX, CurrentPositionY++);
+            Console.Write($"{gladiatorTwo.Health}");
 
-                gladiatorOne.TakeDamage(gladiatorTwo.Damage);
-                gladiatorTwo.TakeDamage(gladiatorOne.Damage);
-                Console.SetCursorPosition(firstGladiatorPositionX, CurrentPositionY);
-                Console.Write($"{gladiatorOne.Health}");
-                Console.SetCursorPosition(secondGladiatorPositionX, CurrentPositionY++);
-                Console.Write($"{gladiatorTwo.Health}");
+            Thread.Sleep(sleepTime);
+        }
+    }
 
-                Thread.Sleep(sleepTime);
-            }
+    private void ShowExistsGladiators()
+    {
+        Console.WriteLine("Гладиаторы: ");
+        int index = 1;
 
-            Console.WriteLine("\n");
-
-            if (gladiatorOne.Health > 0)
-                Console.WriteLine($"Победил гладиатор - {gladiatorOne.Name}");
-            else if (gladiatorTwo.Health > 0)
-                Console.WriteLine($"Победил гладиатор - {gladiatorTwo.Name}");
-            else
-                Console.WriteLine("Ничья!");
-
-            Console.ReadKey();
+        foreach (Gladiator gladiator in _gladiators)
+        {
+            Console.WriteLine(index + ". " + gladiator.GetDescription());
+            index++;
         }
     }
 
@@ -119,35 +124,35 @@ class Game
 class Retiary : Gladiator, ICloneable
 {
     private int _fishnetPeriod = 10;
-    private int fightCounter = 0;
-    private float damageDelimeter = 2f;
+    private int _fightCounter = 0;
+    private float _damageDelimeter = 2f;
 
     public Retiary(string name) : base(name) { }
 
-    override public void ShowStats()
+   public override void ShowStats()
     {
         ShowInfo();
         Console.Write($", сеть (полностью отражает каждую {_fishnetPeriod} атаку " +
             $"но теряет половину брони.)");
     }
 
-    override public void TakeDamage(float damage)
+   public override void TakeDamage(float damage)
     {
-        if (fightCounter % _fishnetPeriod == 0)
-            _armor /= damageDelimeter;
+        if (_fightCounter % _fishnetPeriod == 0)
+            _armor /= _damageDelimeter;
         else
             Health -= damage - _armor;
 
-        fightCounter++;
+        _fightCounter++;
     }
 
-    override public string GetDescription()
+   public override string GetDescription()
     {
         return $"Гладиатор Ретиарий, сетью отражает каждый {_fishnetPeriod} " +
             $"удар, но теряет половину брони";
     }
 
-    override public object Clone()
+   public override object Clone()
     {
         return new Retiary(Name);
     }
@@ -155,7 +160,7 @@ class Retiary : Gladiator, ICloneable
 
 class Lekveary : Gladiator, ICloneable
 {
-    private int lassoFightPeriod = 3;
+    private int _lassoFightPeriod = 3;
     private int fightCounter = 0;
     private float _lassoDamage;
 
@@ -164,30 +169,30 @@ class Lekveary : Gladiator, ICloneable
         ApplyLasso();
     }
 
-    override public float Damage
+   public override float Damage
     {
         get
         {
-            if (fightCounter % lassoFightPeriod == 0)
+            if (fightCounter % _lassoFightPeriod == 0)
                 return _damge + _lassoDamage;
 
             return _damge;
         }
     }
 
-    override public void ShowStats()
+   public override void ShowStats()
     {
         ShowInfo();
         Console.Write($", лассо (+{_lassoDamage} к атаке " +
-            $"на каждом {lassoFightPeriod} ударе.)");
+            $"на каждом {_lassoFightPeriod} ударе.)");
     }
 
-    override public string GetDescription()
+   public override string GetDescription()
     {
-        return $"Гладиатор Бестиарий, использует лассо каждый {lassoFightPeriod} удар";
+        return $"Гладиатор Бестиарий, использует лассо каждый {_lassoFightPeriod} удар";
     }
 
-    override public object Clone()
+   public override object Clone()
     {
         return new Lekveary(Name);
     }
@@ -210,7 +215,7 @@ class Bestiary : Gladiator, ICloneable
         SetDagger();
     }
 
-    override public float Damage
+   public override float Damage
     {
         get
         {
@@ -218,7 +223,7 @@ class Bestiary : Gladiator, ICloneable
         }
     }
 
-    override public void ShowStats()
+   public override void ShowStats()
     {
         ShowInfo();
         int multiplyerForPercent = 100;
@@ -226,12 +231,12 @@ class Bestiary : Gladiator, ICloneable
             $"{(_dagger * multiplyerForPercent).ToString("F1")}%)");
     }
 
-    override public string GetDescription()
+   public override string GetDescription()
     {
         return "Гладиатор Бестиарий, дополнительно нападает с кинжалом";
     }
 
-    override public object Clone()
+   public override object Clone()
     {
         return new Bestiary(Name);
     }
@@ -254,12 +259,12 @@ class Andabat : Gladiator, ICloneable
         SetChainArmor();
     }
 
-    override public void TakeDamage(float damage)
+   public override void TakeDamage(float damage)
     {
         Health -= damage - _armor - (_armor * _chainArmor);
     }
 
-    override public void ShowStats()
+   public override void ShowStats()
     {
         ShowInfo();
         int multiplyerForPercent = 100;
@@ -267,12 +272,12 @@ class Andabat : Gladiator, ICloneable
             $"{(_chainArmor * multiplyerForPercent).ToString("F1")}%)");
     }
 
-    override public string GetDescription()
+   public override string GetDescription()
     {
         return "Гладиатор Анабат, дополнительно защищается кольчугой";
     }
 
-    override public object Clone()
+   public override object Clone()
     {
         return new Andabat(Name);
     }
@@ -291,17 +296,17 @@ class Gaal : Gladiator, ICloneable
 {
     public Gaal(string name) : base(name) { }
 
-    override public void ShowStats()
+   public override void ShowStats()
     {
         ShowInfo();
     }
 
-    override public string GetDescription()
+   public override string GetDescription()
     {
         return "Гладиатор Гал, сильный и безпечный";
     }
 
-    override public object Clone()
+   public override object Clone()
     {
         return new Gaal(Name);
     }
