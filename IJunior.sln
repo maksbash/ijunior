@@ -15,15 +15,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CardDeck", "CardDeck\CardDe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shop", "Shop\Shop.csproj", "{1279ECBE-115B-4013-A79F-E973A1267DC4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PassangerTrainConfigurator", "PassangerTrainConfigurator\PassangerTrainConfigurator.csproj", "{14B839AC-D5BC-4D73-AF9D-7652D3CE158F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PassangerTrainConfigurator", "PassangerTrainConfigurator\PassangerTrainConfigurator.csproj", "{14B839AC-D5BC-4D73-AF9D-7652D3CE158F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladiatorFights", "GladiatorFights\GladiatorFights.csproj", "{BC2499B6-10AC-493F-B82B-E458A0F5C9B3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GladiatorFights", "GladiatorFights\GladiatorFights.csproj", "{BC2499B6-10AC-493F-B82B-E458A0F5C9B3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Supermarket", "Supermarket\Supermarket.csproj", "{5186456F-878B-4DE1-A6F1-A72537FEF2BB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Supermarket", "Supermarket\Supermarket.csproj", "{5186456F-878B-4DE1-A6F1-A72537FEF2BB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "War", "War\War.csproj", "{6410CCD9-95A4-489E-BC6E-FB7136F04887}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "War", "War\War.csproj", "{6410CCD9-95A4-489E-BC6E-FB7136F04887}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aquarium", "Aquarium\Aquarium.csproj", "{4F4B0EDB-4204-42C1-9E25-87CD4CF041CE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aquarium", "Aquarium\Aquarium.csproj", "{4F4B0EDB-4204-42C1-9E25-87CD4CF041CE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zoo", "Zoo\Zoo.csproj", "{35425E77-5AFA-480E-A1CF-5B104D2B4493}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -75,6 +77,10 @@ Global
 		{4F4B0EDB-4204-42C1-9E25-87CD4CF041CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4F4B0EDB-4204-42C1-9E25-87CD4CF041CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4F4B0EDB-4204-42C1-9E25-87CD4CF041CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{35425E77-5AFA-480E-A1CF-5B104D2B4493}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35425E77-5AFA-480E-A1CF-5B104D2B4493}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35425E77-5AFA-480E-A1CF-5B104D2B4493}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35425E77-5AFA-480E-A1CF-5B104D2B4493}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
