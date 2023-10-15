@@ -40,8 +40,7 @@ class Game
         else
             Console.WriteLine("Ничья!");
 
-        Console.ReadKey();
-        
+        Console.ReadKey();   
     }
 
     private void Figth(Gladiator gladiatorOne, Gladiator gladiatorTwo)
@@ -116,6 +115,7 @@ class Game
         else
         {
             Console.WriteLine("Введено некорректное значение, попробуйте ещё раз");
+
             return SelectGladiator(gladiatorNumber, gladiators);
         }
     }
@@ -128,15 +128,15 @@ class Retiary : Gladiator
     private float _damageDelimeter = 2f;
 
     public Retiary(string name) : base(name) { }
-
-   public override void ShowStats()
+    
+    public override void ShowStats()
     {
         ShowInfo();
         Console.Write($", сеть (полностью отражает каждую {_fishnetPeriod} атаку " +
             $"но теряет половину брони.)");
     }
 
-   public override void TakeDamage(float damage)
+    public override void TakeDamage(float damage)
     {
         int parity = _fightCounter % _fishnetPeriod;
 
@@ -148,13 +148,13 @@ class Retiary : Gladiator
         _fightCounter++;
     }
 
-   public override string GetDescription()
+    public override string GetDescription()
     {
         return $"Гладиатор Ретиарий, сетью отражает каждый {_fishnetPeriod} " +
             $"удар, но теряет половину брони";
     }
 
-   public override Retiary Clone()
+    public override Retiary Clone()
     {
         return new Retiary(Name);
     }
@@ -171,7 +171,7 @@ class Lekveary : Gladiator
         ApplyLasso();
     }
 
-   public override float Damage
+    public override float Damage
     {
         get
         {
@@ -182,26 +182,25 @@ class Lekveary : Gladiator
         }
     }
 
-   public override void ShowStats()
+    public override void ShowStats()
     {
         ShowInfo();
         Console.Write($", лассо (+{_lassoDamage} к атаке " +
             $"на каждом {_lassoFightPeriod} ударе.)");
     }
 
-   public override string GetDescription()
+    public override string GetDescription()
     {
         return $"Гладиатор Бестиарий, использует лассо каждый {_lassoFightPeriod} удар";
     }
 
-   public override Lekveary Clone()
+    public override Lekveary Clone()
     {
         return new Lekveary(Name);
     }
 
     private void ApplyLasso()
     {
-
         float minDamage = 1f;
         float maxDamage = 5f;
         _lassoDamage = (float)(UserUtils.NextDouble() * (maxDamage - minDamage) + minDamage);
@@ -217,7 +216,7 @@ class Bestiary : Gladiator
         SetDagger();
     }
 
-   public override float Damage
+    public override float Damage
     {
         get
         {
@@ -225,7 +224,7 @@ class Bestiary : Gladiator
         }
     }
 
-   public override void ShowStats()
+    public override void ShowStats()
     {
         ShowInfo();
         int multiplyerForPercent = 100;
@@ -233,12 +232,12 @@ class Bestiary : Gladiator
             $"{(_dagger * multiplyerForPercent).ToString("F1")}%)");
     }
 
-   public override string GetDescription()
+    public override string GetDescription()
     {
         return "Гладиатор Бестиарий, дополнительно нападает с кинжалом";
     }
 
-   public override Bestiary Clone()
+    public override Bestiary Clone()
     {
         return new Bestiary(Name);
     }
@@ -260,12 +259,12 @@ class Andabat : Gladiator
         SetChainArmor();
     }
 
-   public override void TakeDamage(float damage)
+    public override void TakeDamage(float damage)
     {
         Health -= damage - _armor - (_armor * _chainArmor);
     }
 
-   public override void ShowStats()
+    public override void ShowStats()
     {
         ShowInfo();
         int multiplyerForPercent = 100;
@@ -273,12 +272,12 @@ class Andabat : Gladiator
             $"{(_chainArmor * multiplyerForPercent).ToString("F1")}%)");
     }
 
-   public override string GetDescription()
+    public override string GetDescription()
     {
         return "Гладиатор Анабат, дополнительно защищается кольчугой";
     }
 
-   public override Andabat Clone()
+    public override Andabat Clone()
     {
         return new Andabat(Name);
     }
@@ -289,24 +288,23 @@ class Andabat : Gladiator
         float max = 0.2f;
         _chainArmor = (float)(UserUtils.NextDouble() * (max - min) + min);
     }
-
 }
 
 class Gaal : Gladiator
 {
     public Gaal(string name) : base(name) { }
 
-   public override void ShowStats()
+    public override void ShowStats()
     {
         ShowInfo();
     }
 
-   public override string GetDescription()
+    public override string GetDescription()
     {
         return "Гладиатор Гал, сильный и безпечный";
     }
 
-   public override Gaal Clone()
+    public override Gaal Clone()
     {
         return new Gaal(Name);
     }
@@ -363,12 +361,11 @@ abstract class Gladiator
 
 class Bar
 {
-
-    public void DrawBar(int health, int defaultHealth, int xPosition, int yPosition)
+    public void DrawBar(int health, int maximumHealth, int xPosition, int yPosition)
     {
-        const int MaxValue = 10;
+        const int MaxBarValue = 10;
         const int ThresholdValue = 3;
-        int value = health / (defaultHealth / MaxValue);
+        int value = health / (maximumHealth / MaxBarValue);
 
         (int CurrentPositionX, int CurrentPositionY) = Console.GetCursorPosition();
 
@@ -384,7 +381,7 @@ class Bar
             currentColor = fillColor;
 
         string fillBar = new string(' ', value);
-        string emptyBar = new string(' ', MaxValue - value);
+        string emptyBar = new string(' ', MaxBarValue - value);
 
         Console.SetCursorPosition(xPosition, yPosition);
         Console.Write('[');
