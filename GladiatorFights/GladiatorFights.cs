@@ -103,21 +103,23 @@ class Game
 
     private Gladiator SelectGladiator(int gladiatorNumber, Gladiator[] gladiators)
     {
-        Console.Write($"Введите номер {gladiatorNumber}-го гладиатора: ");
+        bool isActive = true;
+        int gladiatorIndex = -1;
 
-        int.TryParse(Console.ReadLine(), out int gladiatorIndex);
-        gladiatorIndex--;
-
-        if (gladiatorIndex >= 0 && gladiatorIndex < gladiators.Length)
+        while (isActive)
         {
-            return gladiators[gladiatorIndex].Clone();
-        }
-        else
-        {
-            Console.WriteLine("Введено некорректное значение, попробуйте ещё раз");
+            Console.Write($"Введите номер {gladiatorNumber}-го гладиатора: ");
 
-            return SelectGladiator(gladiatorNumber, gladiators);
+            int.TryParse(Console.ReadLine(), out gladiatorIndex);
+            gladiatorIndex--;
+
+            if (gladiatorIndex >= 0 && gladiatorIndex < gladiators.Length)
+                isActive = false;
+            else
+                Console.WriteLine("Введено некорректное значение, попробуйте ещё раз");
         }
+
+        return gladiators[gladiatorIndex].Clone();
     }
 }
 
