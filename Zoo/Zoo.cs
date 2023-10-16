@@ -52,7 +52,8 @@ class Zoo
 
                 if (userNumber < 1 || userNumber > AviariesCount)
                 {
-                    Console.WriteLine("Вы ввели неверное число, попробуйте ещё раз.");
+                    Console.WriteLine("Вы ввели неверую команду, " +
+                        "попробуйте ещё раз.");
                     Console.ReadKey();
                 }
                 else
@@ -97,19 +98,24 @@ class Aviary
             _animals.Add(animal.Clone());
     }
 
-    public int Count
-    {
-        get
-        {
-            return _animals.Count;
-        }
-    }
-
     public void ShowInfo()
     {
+        int maleCount = 0;
+        int femaleCount = 0;
+
+        foreach (Animal animal in _animals)
+            if (animal.Gender == Gender.Male)
+                maleCount++;
+            else
+                femaleCount++;
+
         Console.Clear();
         Console.WriteLine($"В вольере нажодится животное {_animals[0].Name}");
-        Console.WriteLine($"Насчитывается {Count} осыбей");
+        Console.WriteLine($"Насчитывается {_animals.Count} осыбей");
+        Console.WriteLine($"Среди них {maleCount} мужских осыбей " +
+            $"и {femaleCount} женских");
+        Console.WriteLine($"Обычно они издают звук похожий " +
+            $"на \"{_animals[0].Sound}\"");
         Console.ReadKey();
     }
 }
