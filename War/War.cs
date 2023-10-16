@@ -58,6 +58,7 @@ class War
         for (int i = 0; i < troop1.WarriorsCount; i++)
         {
             int enemyNumber = random.Next(0, troop2.WarriorsCount);
+            
             if (troop2.WarriorsCount > 0)
             {
                 troop2.GetWarrior(enemyNumber).TakeDamage(troop1.GetWarrior(i).DamageValue);
