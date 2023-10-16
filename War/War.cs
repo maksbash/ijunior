@@ -80,10 +80,7 @@ class Troop
         SetRandomWarriors(numberOfWarriors);
     }
 
-    public int WarriorsCount
-    {
-        get { return _warriors.Count; }
-    }
+    public int WarriorsCount => _warriors.Count;
 
     public Warrior GetWarrior(int index)
     {
@@ -114,13 +111,13 @@ class Troop
         for (int i = 0; i < count; i++)
         {
             int wariosIndex = random.Next(0, warriorsCount);
-            Warrior warrior = (Warrior)warriors[wariosIndex].Clone();
+            Warrior warrior = warriors[wariosIndex].Clone();
             _warriors.Add(warrior);
         }
     }
 }
 
-class Retiary : Warrior, ICloneable
+class Retiary : Warrior
 {
     private int _fishnetPeriod = 10;
     private int _fightCounter = 0;
@@ -138,13 +135,13 @@ class Retiary : Warrior, ICloneable
         _fightCounter++;
     }
 
-    public override object Clone()
+    public override Retiary Clone()
     {
         return new Retiary(Name);
     }
 }
 
-class Lekveary : Warrior, ICloneable
+class Lekveary : Warrior
 {
     private int _lassoFightPeriod = 3;
     private int _fightCounter = 0;
@@ -166,7 +163,7 @@ class Lekveary : Warrior, ICloneable
         }
     }
 
-    public override object Clone()
+    public override Lekveary Clone()
     {
         return new Lekveary(Name);
     }
@@ -180,7 +177,7 @@ class Lekveary : Warrior, ICloneable
     }
 }
 
-class Bestiary : Warrior, ICloneable
+class Bestiary : Warrior
 {
     private float _dagger;
 
@@ -197,7 +194,7 @@ class Bestiary : Warrior, ICloneable
         }
     }
 
-    public override object Clone()
+    public override Bestiary Clone()
     {
         return new Bestiary(Name);
     }
@@ -211,7 +208,7 @@ class Bestiary : Warrior, ICloneable
     }
 }
 
-class Andabat : Warrior, ICloneable
+class Andabat : Warrior
 {
     private float _chainArmor;
 
@@ -225,7 +222,7 @@ class Andabat : Warrior, ICloneable
         Health -= damage - Armor - (Armor * _chainArmor);
     }
 
-    public override object Clone()
+    public override Andabat Clone()
     {
         return new Andabat(Name);
     }
@@ -240,17 +237,17 @@ class Andabat : Warrior, ICloneable
 
 }
 
-class Gaal : Warrior, ICloneable
+class Gaal : Warrior
 {
     public Gaal(string name) : base(name) { }
 
-    public override object Clone()
+    public override Gaal Clone()
     {
         return new Gaal(Name);
     }
 }
 
-abstract class Warrior : ICloneable
+abstract class Warrior
 {
     protected float Armor;
     protected float Damage;
@@ -289,5 +286,5 @@ abstract class Warrior : ICloneable
         Health -= damage - Armor;
     }
 
-    public abstract object Clone();
+    public abstract Warrior Clone();
 }
