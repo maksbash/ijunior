@@ -15,8 +15,18 @@
         parts[8] = new Part("GearShift", 52);
         parts[9] = new Part("AirBag", 55);
 
-        CarService carService = new CarService(parts);
+        int minimumCars = 10;
+        int maximumCars = 200;
+        int countCars = UserUtils.getRandomValue(minimumCars, maximumCars);
 
+        Queue<Car> cars = new Queue<Car>();
+
+        for (int i = 0; i < countCars; i++)
+        {
+            cars.Enqueue(new Car(countAvailebleParts));
+        }
+
+        CarService carService = new CarService(parts);
 
         Console.ReadKey();
     }
@@ -37,16 +47,8 @@ class CarService
     {
         _partsWarehouse = new PartsWarehouse(availebleParts);
 
-        int minimumCars = 10;
-        int maximumCars = 200;
-        int countCars = UserUtils.getRandomValue(minimumCars, maximumCars);
+        
 
-        _cars = new Queue<Car>();
-
-        for (int i = 0; i < countCars; i++)
-        {
-            _cars.Enqueue(new Car(_countAvailibleParts));
-        }
     }
 
     public void Service()
