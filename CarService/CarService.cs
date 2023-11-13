@@ -97,21 +97,34 @@ class Car
 class PartsWarehouse
 {
     private Part[] _worldParts;
-    private List<Queue<Part>> _parts;
+    private Dictionary<Part, int> _parts;
 
     public PartsWarehouse(Part[] parts)
     {
-        _worldParts = parts;
-        _parts = new List<Queue<Part>>();
-        AddParts(_worldParts.Length);
+        int minimumCurrent = 5;
+        int maximumCurrent = 15;
+        _parts = new Dictionary<Part, int>();
+
+        for (int i = 0; i < parts.Length; i++)
+        {
+            int currentCount =
+                UserUtils.getRandomValue(minimumCurrent, maximumCurrent);
+
+            _parts.Add(parts[i].CLone(), currentCount);
+        }
     }
 
-    public List<Queue<Part>> getParts() => _parts;
-
-    public void TryGetPart(int partId, out Part part)
+    public void TryGetPart(Part partForSearch, out Part part)
     {
-        if (partId >= _parts.Count)
-            part = null;
+        if (_parts.Keys.Contains(partForSearch))
+        {
+            if (_parts[partForSearch] > 0)
+            {
+                part = _parts.Keys.;
+            }
+        }
+
+
 
         if (_parts[partId].Count == 0)
             part = null;
@@ -119,44 +132,34 @@ class PartsWarehouse
         part = _parts[partId].Dequeue();
     }
 
-    private void AddParts(int countAvailibleParts)
-    {
-        int percentPartsIn = 80; //сколько запчастей в % от имеющихся в природе
-        int partsCount = countAvailibleParts - (countAvailibleParts / 100) * percentPartsIn;
-
-        //Заполняем запчастями
-        for (int i = 0; i < partsCount; i++)
-        {
-            int minimumCurrent = 5;
-            int maximumCurrent = 15;
-            int currentCount =
-                UserUtils.getRandomValue(minimumCurrent, maximumCurrent);
-
-            _parts.Add(new Queue<Part>());
-
-            //Заполняем количеством каждую запчасть
-            for (int j = 0; j < currentCount; j++)
-            {
-                _parts[i].Enqueue(_worldParts[i]);
-            }
-        }
-    }
 }
 
-class Part
+class Part : IComparable<Part>
 {
-    private static int LastId = -1;
-
     public Part(string name, int price)
     {
-        Id = ++LastId;
         Price = price;
         Name = name;
     }
 
-    public int Id { get; private set; }
     public int Price { get; private set; }
     public string Name { get; private set; }
+
+    public Part Clone()
+    {
+        return new Part(Name, Price);
+    }
+
+    public bool Compare(Part part)
+    {
+        return part.Name == Name && part.Price == Price;
+    }
+
+    public int CompareTo(Part? other)
+    {
+        if (!(other.Name == Name && other.Price == Price)) return -1;
+        else return 0;
+    }
 }
 
 class UserUtils
