@@ -5,136 +5,130 @@
         int countAvailebleParts = 10;
         Part[] parts = new Part[countAvailebleParts];
         parts[0] = new Part("Wheel", 70);
-        parts[1] = new Part("LowBeams", 10);
-        parts[2] = new Part("HighBeams", 13);
-        parts[3] = new Part("Bumper", 20);
+        parts[1] = new Part("LowBeams", 100);
+        parts[2] = new Part("HighBeams", 130);
+        parts[3] = new Part("Bumper", 200);
         parts[4] = new Part("Wiperss", 30);
-        parts[5] = new Part("Tyre", 22);
-        parts[6] = new Part("Silencer", 17);
+        parts[5] = new Part("Tyre", 220);
+        parts[6] = new Part("Silencer", 170);
         parts[7] = new Part("Brake", 48);
-        parts[8] = new Part("GearShift", 52);
-        parts[9] = new Part("AirBag", 55);
+        parts[8] = new Part("GearShift", 520);
+        parts[9] = new Part("AirBag", 550);
 
-        int minimumCars = 10;
-        int maximumCars = 200;
+        int minimumCars = 100;
+        int maximumCars = 500;
         int countCars = UserUtils.getRandomValue(minimumCars, maximumCars);
 
         Queue<Car> cars = new Queue<Car>();
 
         for (int i = 0; i < countCars; i++)
         {
-            cars.Enqueue(new Car(countAvailebleParts));
+            int partIndex = UserUtils.getRandomValue(0, countAvailebleParts);
+            cars.Enqueue(new Car(parts[partIndex].Clone()));
         }
 
-        CarService carService = new CarService(parts);
+        CarService carService = new CarService(parts, cars);
+        carService.Service();
 
         Console.ReadKey();
     }
-
 }
 
 class CarService
 {
-    private int _minimumAvailibleParts = 50;
-    private int _maximumAvailibleParts = 100;
-    private int _countAvailibleParts;
-    private int _balance = 2000;
+    private int _balance = 1000;
+    private int _profitInPercent = 10;
+    private int _fineInPercent = 10;
 
     private PartsWarehouse _partsWarehouse;
     private Queue<Car> _cars;
 
-    public CarService(Part[] availebleParts)
+    public CarService(Part[] availebleParts, Queue<Car> cars)
     {
         _partsWarehouse = new PartsWarehouse(availebleParts);
-
-        
-
+        _cars = cars;
     }
 
     public void Service()
     {
         Console.Clear();
 
-        while (_cars.Count > 0)
+        while (_cars.Count > 0 && _balance > 0)
         {
+            Console.WriteLine($"Баланс сервиса = {_balance}");
             Console.WriteLine($"Автомобилей в очереди - {_cars.Count}");
+            
             Car car = _cars.Dequeue();
-            bool isFixed = TryFixCar(car);
 
-            //if (isFixed == false)
-            //    Refusal()
+            Console.WriteLine($"Поломка текущего автомобиля - {car.BrokenPart.Name}");
+
+            int countOfThisParts = _partsWarehouse.GetPartsCount(car.BrokenPart);
+            Console.WriteLine($"У вас имеется {countOfThisParts} таких запчастей");
+
+            if (countOfThisParts > 0)
+            {
+                _partsWarehouse.GetPart(car.BrokenPart);
+                _balance += car.BrokenPart.Price + (car.BrokenPart.Price / _profitInPercent);
+                Console.WriteLine("Машина починена.");
+            }
+            else
+            {
+                _balance -= car.BrokenPart.Price / _fineInPercent;
+            }
         }
 
-    }
-
-    private bool Refusal(int price)
-    {
-        return true;
-    }
-
-    private bool TryFixCar(Car car)
-    {
-        int partIdForChange = car.BrokenPart;
-        _partsWarehouse.TryGetPart(partIdForChange, out Part part);
-
-        if (part == null)
-            return false;
+        if (_balance > 0)
+            Console.WriteLine($"Вы починили все машины! Ваш баланс - {_balance}");
         else
-            return true;
+            Console.WriteLine("Вы обанкротились");
     }
 }
 
 class Car
 {
-    public Car(int maximumParts)
+    public Car(Part brokenPart)
     {
-        BrokenPart = UserUtils.getRandomValue(0, maximumParts);
+        BrokenPart = brokenPart;
     }
 
-    public int BrokenPart { get; private set; }
+    public Part BrokenPart { get; private set; }
 }
 
 class PartsWarehouse
 {
-    private Part[] _worldParts;
-    private Dictionary<Part, int> _parts;
+    private Dictionary<string, int> _parts;
 
     public PartsWarehouse(Part[] parts)
     {
-        int minimumCurrent = 5;
-        int maximumCurrent = 15;
-        _parts = new Dictionary<Part, int>();
+        int minimumCurrent = 1;
+        int maximumCurrent = 4;
+        _parts = new Dictionary<string, int>();
 
         for (int i = 0; i < parts.Length; i++)
         {
             int currentCount =
                 UserUtils.getRandomValue(minimumCurrent, maximumCurrent);
 
-            _parts.Add(parts[i].CLone(), currentCount);
+            _parts.Add(parts[i].Name, currentCount);
         }
     }
 
-    public void TryGetPart(Part partForSearch, out Part part)
+    public int GetPartsCount(Part partForSearch)
     {
-        if (_parts.Keys.Contains(partForSearch))
-        {
-            if (_parts[partForSearch] > 0)
-            {
-                part = _parts.Keys.;
-            }
-        }
+        if (_parts.Keys.Contains(partForSearch.Name))
+            return _parts[partForSearch.Name];
 
-
-
-        if (_parts[partId].Count == 0)
-            part = null;
-
-        part = _parts[partId].Dequeue();
+        return 0;
     }
 
+    public void GetPart(Part partForSearch)
+    {
+        if (GetPartsCount(partForSearch) > 0)
+            _parts[partForSearch.Name]--;
+    }
 }
 
-class Part : IComparable<Part>
+class Part
 {
     public Part(string name, int price)
     {
@@ -149,17 +143,6 @@ class Part : IComparable<Part>
     {
         return new Part(Name, Price);
     }
-
-    public bool Compare(Part part)
-    {
-        return part.Name == Name && part.Price == Price;
-    }
-
-    public int CompareTo(Part? other)
-    {
-        if (!(other.Name == Name && other.Price == Price)) return -1;
-        else return 0;
-    }
 }
 
 class UserUtils
@@ -172,16 +155,3 @@ class UserUtils
     }
 }
 
-//enum Parts
-//{
-//    Wheel,
-//    LowBeams,
-//    HighBeams,
-//    Bumper,
-//    Wiperss,
-//    Tyre,
-//    Silencer,
-//    Brake,
-//    GearShift,
-//    AirBag
-//}
