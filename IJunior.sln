@@ -39,6 +39,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TopPlayers", "TopPlayers\To
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DefinitionOfDelay", "DefinitionOfDelay\DefinitionOfDelay.csproj", "{DB68DFED-FDAE-44F9-AFD2-F28EFE15FE29}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeaponsReport", "WeaponsReport\WeaponsReport.csproj", "{0CDF327A-71C4-429C-87E2-B04C5B2D4AD5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -117,6 +119,10 @@ Global
 		{DB68DFED-FDAE-44F9-AFD2-F28EFE15FE29}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DB68DFED-FDAE-44F9-AFD2-F28EFE15FE29}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DB68DFED-FDAE-44F9-AFD2-F28EFE15FE29}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0CDF327A-71C4-429C-87E2-B04C5B2D4AD5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0CDF327A-71C4-429C-87E2-B04C5B2D4AD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0CDF327A-71C4-429C-87E2-B04C5B2D4AD5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0CDF327A-71C4-429C-87E2-B04C5B2D4AD5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
