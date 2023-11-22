@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CriminalSearch", "CriminalS
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Amnesty", "Amnesty\Amnesty.csproj", "{B70AFAB2-657C-4F34-9AE8-CB6F3F697483}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hospital", "Hospital\Hospital.csproj", "{20168138-7DAC-4042-B50B-1EC714616237}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -99,6 +101,10 @@ Global
 		{B70AFAB2-657C-4F34-9AE8-CB6F3F697483}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B70AFAB2-657C-4F34-9AE8-CB6F3F697483}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B70AFAB2-657C-4F34-9AE8-CB6F3F697483}.Release|Any CPU.Build.0 = Release|Any CPU
+		{20168138-7DAC-4042-B50B-1EC714616237}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20168138-7DAC-4042-B50B-1EC714616237}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20168138-7DAC-4042-B50B-1EC714616237}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20168138-7DAC-4042-B50B-1EC714616237}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
