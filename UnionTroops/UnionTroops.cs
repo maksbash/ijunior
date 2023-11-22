@@ -1,4 +1,6 @@
-﻿internal class Program
+﻿using System.Collections.Generic;
+
+internal class Program
 {
     private static void Main(string[] args)
     {
@@ -22,9 +24,21 @@
 
         char latter = 'Б';
 
-        var unionedTroop = troopSecond.Union(troopFirst.Where(troopFirst => troopFirst.Name.ToUpper().StartsWith(latter)));
+        troopSecond =
+            troopSecond.Union(troopFirst.Where(troopFirst =>
+            troopFirst.Name.ToUpper().StartsWith(latter))).ToList();
 
-        foreach (var solder in unionedTroop)
+        troopFirst = troopFirst.Where(troopFirst =>
+            !troopFirst.Name.ToUpper().StartsWith(latter)).ToList();
+
+        Console.WriteLine("Первый отряд:");
+
+        foreach (var solder in troopFirst)
+            Console.WriteLine($"{solder.Name} - {solder.Rank}");
+
+        Console.WriteLine("Второй отряд:");
+
+        foreach (var solder in troopSecond)
             Console.WriteLine($"{solder.Name} - {solder.Rank}");
 
         Console.ReadKey();
