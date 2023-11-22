@@ -35,6 +35,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Amnesty", "Amnesty\Amnesty.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hospital", "Hospital\Hospital.csproj", "{20168138-7DAC-4042-B50B-1EC714616237}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TopPlayers", "TopPlayers\TopPlayers.csproj", "{B37EC83E-AD5E-4385-90DE-1B6513F7AC13}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -105,6 +107,10 @@ Global
 		{20168138-7DAC-4042-B50B-1EC714616237}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{20168138-7DAC-4042-B50B-1EC714616237}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{20168138-7DAC-4042-B50B-1EC714616237}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B37EC83E-AD5E-4385-90DE-1B6513F7AC13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B37EC83E-AD5E-4385-90DE-1B6513F7AC13}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B37EC83E-AD5E-4385-90DE-1B6513F7AC13}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B37EC83E-AD5E-4385-90DE-1B6513F7AC13}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
