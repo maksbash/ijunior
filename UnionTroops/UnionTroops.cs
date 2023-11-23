@@ -24,12 +24,13 @@ internal class Program
 
         char latter = 'Б';
 
-        troopSecond =
-            troopSecond.Union(troopFirst.Where(troopFirst =>
-            troopFirst.Name.ToUpper().StartsWith(latter))).ToList();
+        var soldersForMove = troopFirst.Where(troopFirst =>
+            troopFirst.Name.ToUpper().StartsWith(latter));
 
-        troopFirst = troopFirst.Where(troopFirst =>
-            !troopFirst.Name.ToUpper().StartsWith(latter)).ToList();
+        troopSecond =
+            troopSecond.Union(soldersForMove).ToList();
+
+        troopFirst = troopFirst.Except(soldersForMove).ToList();
 
         Console.WriteLine("Первый отряд:");
 
